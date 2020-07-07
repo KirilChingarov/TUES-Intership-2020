@@ -13,6 +13,11 @@
 
             $repo = new CharacterRepository();
 
+            if($repo->checkCharacterName($name)){
+                $result['msg'] = 'Character is already saved';
+                return $result;
+            }
+
             $character = [
                 'name' => $name,
                 'health' => $health,

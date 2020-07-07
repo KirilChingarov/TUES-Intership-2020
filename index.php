@@ -5,14 +5,35 @@
     });
 
     use Model\Services\CharacterService;
+    use Model\Services\PlayerPartyService;
 
     $characterService = new CharacterService();
 
-    $result = $characterService->saveCharacter('Arsene', 130, 10, 40);
+    $result = $characterService->saveCharacter('Captian Kidd', 200, 8, 42);
+    echo var_dump($result) . "<br>";
+    $result = $characterService->saveCharacter('Carmen', 150, 10, 60);
+    echo var_dump($result) . "<br>"; 
+    $result = $characterService->saveCharacter('Zoro', 140, 11, 70);
+    echo var_dump($result) . "<br>";  
+    $result = $characterService->saveCharacter('Izanagi', 180, 15, 40);
+    echo var_dump($result) . "<br>";
+    echo "<br>";
 
-    echo var_dump($result) . "<br><br>";
+    $playerPartyService = new PlayerPartyService();
 
-    $result = $characterService->getCharacterByName('Arsene');
+    $result = $playerPartyService->saveNewParty('Party1');
+    echo var_dump($result) . "<br>";
+    $result = $playerPartyService->getPartyByName('Party1');
+    echo var_dump($result['party']) . "<br>";
+    echo "<br>";
 
-    echo var_dump($result);
+    $result = $playerPartyService->addMemberToPartyByName('Izanagi', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $playerPartyService->addMemberToPartyByName('Captian Kidd', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $playerPartyService->addMemberToPartyByName('Zoro', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $playerPartyService->addMemberToPartyByName('Carmen', 'Party1');
+    echo $result['msg'] . "<br>";
+    echo "<br>";
 ?>
