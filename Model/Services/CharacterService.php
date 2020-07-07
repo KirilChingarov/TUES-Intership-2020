@@ -27,5 +27,23 @@
 
             return $result;
         }
+
+        public function getCharacterByName($characterName){
+            $result = [
+                'success' => false,
+                'msg' => 'Character has not been found',
+            ];
+
+            $repo = new CharacterRepository();
+            $character = $repo->getCharacterByName($characterName);
+
+            if($character){
+                $result['success'] = true;
+                $result['msg'] = 'Character has been found';
+                $result['character'] = $character;
+            }
+
+            return $result;
+        }
     }
 ?>

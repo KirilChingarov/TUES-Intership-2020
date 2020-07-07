@@ -8,7 +8,11 @@
 
     $characterService = new CharacterService();
 
-    $result = $characterService->saveCharacter('Gosho', 120, 10, 40);
+    $result = $characterService->saveCharacter('Arsene', 130, 10, 40);
+
+    echo var_dump($result) . "<br><br>";
+
+    $result = $characterService->getCharacterByName('Arsene');
 
     echo var_dump($result);
 ?>
