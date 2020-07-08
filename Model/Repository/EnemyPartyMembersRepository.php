@@ -16,7 +16,8 @@
             $pdo = DBManager::getInstance()->getConnection();
 
             $sql = 'DELETE FROM EnemyPartyMembers
-            WHERE EnemyPartyId = ? AND CharacterId = ?';
+            WHERE EnemyPartyId = ? AND CharacterId = ?
+            LIMIT 1';
 
             $stmt = $pdo->prepare($sql);
             return $stmt->execute(array($enemyPartyId, $characterId));

@@ -1,92 +1,25 @@
 <?php
     namespace Controller;
 
-use Model\Services\PlayerPartyService;
+    use Model\Services\EnemyPartyService;
 
-class PlayerPartyController{
-        public function addNewPlayerParty(){
+    class EnemyPartyController{
+        public function addNewEnemyParty(){
             $result = [
                 'success' => false
             ];
 
-            $playerPartyName = $_POST['playerPartyName'] ?? '';
+            $enemyPartyName = $_POST['enemyPartyName'] ?? '';
 
-            if(!$this->validateName($playerPartyName)){
+            if(!$this->validateName($enemyPartyName)){
                 $result['msg'] = 'Invalid party name';
 
                 echo json_encode($result, JSON_PRETTY_PRINT);
                 return $result;
             }
 
-            $playerPartyService = new PlayerPartyService();
-            $result = $playerPartyService->saveNewParty($playerPartyName);
-
-            echo json_encode($result, JSON_PRETTY_PRINT);
-            return $result;
-        }
-
-        public function getPlayerPartyByName(){
-            $result = [
-                'success' => false
-            ];
-
-            $playerPartyName = $_POST['playerPartyName'] ?? '';
-
-            if(!$this->validateName($playerPartyName)){
-                $result['msg'] = 'Invalid party name';
-
-                echo json_encode($result, JSON_PRETTY_PRINT);
-                return $result;
-            }
-
-            $playerPartyService = new PlayerPartyService();
-            $result = $playerPartyService->getPartyByName($playerPartyName);
-
-            echo json_encode($result, JSON_PRETTY_PRINT);
-            return $result;
-        }
-
-        public function addMemberToPlayerPartyByName(){
-            $result = [
-                'success' => false
-            ];
-
-            $characterName = $_POST['characterName'] ?? '';
-            $playerPartyName = $_POST['playerPartyName'] ?? '';
-
-            if(!$this->validateName($characterName)
-            || !$this->validateName($playerPartyName)){
-                $result['msg'] = 'Invalid input parameters';
-
-                echo json_encode($result, JSON_PRETTY_PRINT);
-                return $result;
-            }
-
-            $playerPartyService = new PlayerPartyService();
-            $result = $playerPartyService->addMemberToPartyByName($characterName, $playerPartyName);
-
-            echo json_encode($result, JSON_PRETTY_PRINT);
-            return $result;
-        }
-
-        public function removeMemberFromPlayerPartyByName(){
-            $result = [
-                'success' => false
-            ];
-
-            $characterName = $_POST['characterName'] ?? '';
-            $playerPartyName = $_POST['playerPartyName'] ?? '';
-
-            if(!$this->validateName($characterName)
-            || !$this->validateName($playerPartyName)){
-                $result['msg'] = 'Invalid input parameters';
-
-                echo json_encode($result, JSON_PRETTY_PRINT);
-                return $result;
-            }
-
-            $playerPartyService = new PlayerPartyService();
-            $result = $playerPartyService->removeMemberFromParty($characterName, $playerPartyName);
+            $enemyPartyService = new EnemyPartyService();
+            $result = $enemyPartyService->saveNewEnemyParty($enemyPartyName);
 
             echo json_encode($result, JSON_PRETTY_PRINT);
             return $result;
@@ -94,6 +27,73 @@ class PlayerPartyController{
 
         private function validateName($playerPartyName){
             return !empty($playerPartyName);
+        }
+
+        public function getEnemyPartyByName(){
+            $result = [
+                'success' => false
+            ];
+
+            $enemyPartyName = $_POST['enemyPartyName'] ?? '';
+
+            if(!$this->validateName($enemyPartyName)){
+                $result['msg'] = 'Invalid party name';
+
+                echo json_encode($result, JSON_PRETTY_PRINT);
+                return $result;
+            }
+
+            $enemyPartyService = new EnemyPartyService();
+            $result = $enemyPartyService->getEnemyPartyByName($enemyPartyName);
+
+            echo json_encode($result, JSON_PRETTY_PRINT);
+            return $result;
+        }
+
+        public function addMemberToEnemyPartyByName(){
+            $result = [
+                'success' => false
+            ];
+
+            $characterName = $_POST['characterName'] ?? '';
+            $enemyPartyName = $_POST['enemyPartyName'] ?? '';
+
+            if(!$this->validateName($characterName)
+            || !$this->validateName($enemyPartyName)){
+                $result['msg'] = 'Invalid input parameters';
+
+                echo json_encode($result, JSON_PRETTY_PRINT);
+                return $result;
+            }
+
+            $EnemyPartyService = new EnemyPartyService();
+            $result = $EnemyPartyService->addMemberToPartyByName($characterName, $enemyPartyName);
+
+            echo json_encode($result, JSON_PRETTY_PRINT);
+            return $result;
+        }
+
+        public function removeMemberFromEnemyPartyByName(){
+            $result = [
+                'success' => false
+            ];
+
+            $characterName = $_POST['characterName'] ?? '';
+            $enemyPartyName = $_POST['enemyPartyName'] ?? '';
+
+            if(!$this->validateName($characterName)
+            || !$this->validateName($enemyPartyName)){
+                $result['msg'] = 'Invalid input parameters';
+
+                echo json_encode($result, JSON_PRETTY_PRINT);
+                return $result;
+            }
+
+            $enemyPartyService = new EnemyPartyService();
+            $result = $enemyPartyService->removeMemberFromParty($characterName, $enemyPartyName);
+
+            echo json_encode($result, JSON_PRETTY_PRINT);
+            return $result;
         }
     }
 ?>
