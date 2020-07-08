@@ -19,7 +19,7 @@
             WHERE Name = ?';
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array($partyName));
+            $stmt->execute([$partyName]);
             return $stmt->fetch();
         }
 

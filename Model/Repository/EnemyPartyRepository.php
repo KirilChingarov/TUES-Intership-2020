@@ -19,7 +19,7 @@
             WHERE Name = ?';
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array($enemyPartyName));
+            $stmt->execute([$enemyPartyName]);
             return $stmt->fetch();
         }
 

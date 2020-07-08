@@ -9,7 +9,7 @@
             WHERE Name = ?';
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array($characterName));
+            $stmt->execute([$characterName]);
             return $stmt->fetch();
         }
 

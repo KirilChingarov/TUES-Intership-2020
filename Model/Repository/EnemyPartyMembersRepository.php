@@ -9,7 +9,7 @@
             VALUES(?, ?)';
 
             $stmt = $pdo->prepare($sql);
-            return $stmt->execute(array($enemyPartyId, $characterId));
+            return $stmt->execute([$enemyPartyId, $characterId]);
         }
 
         public function removeMemberFromParty($characterId, $enemyPartyId){
@@ -20,7 +20,7 @@
             LIMIT 1';
 
             $stmt = $pdo->prepare($sql);
-            return $stmt->execute(array($enemyPartyId, $characterId));
+            return $stmt->execute([$enemyPartyId, $characterId]);
         }
 
         public function getMembersCount($enemyPartyId){
@@ -30,7 +30,7 @@
             WHERE EnemyPartyId = ?';
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array($enemyPartyId));
+            $stmt->execute([$enemyPartyId]);
             return $stmt->fetch();
         }
 
@@ -41,7 +41,7 @@
             WHERE EnemyPartyId = ? AND CharacterId = ?';
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array($enemyPartyId, $characterId));
+            $stmt->execute([$enemyPartyId, $characterId]);
             return $stmt->fetch();
         }
     }
