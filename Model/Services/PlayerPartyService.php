@@ -124,7 +124,7 @@ class PlayerPartyService{
             return $result;
         }
 
-        public function checkPlayerPartyCapacity($playerPartyName){
+        private function checkPlayerPartyCapacity($playerPartyName){
             $result = [
                 'success' => false,
                 'msg' => $playerPartyName . ' was not found'

@@ -38,7 +38,7 @@ class CharacterController{
                 'success' => false
             ];
 
-            $characterName = $_POST['characterName'];
+            $characterName = $_POST['characterName'] ?? '';
 
             if(!$this->validateCharacterName($characterName)){
                 $result['msg'] = 'Invalid character parameters';
