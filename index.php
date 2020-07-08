@@ -6,6 +6,7 @@
 
     use Model\Services\CharacterService;
     use Model\Services\PlayerPartyService;
+    use Model\Services\EnemyPartyService;
 
     $characterService = new CharacterService();
 
@@ -38,6 +39,28 @@
     $result = $playerPartyService->addMemberToPartyByName('Jack Frost', 'Party1');
     echo $result['msg'] . "<br>";
     $result = $playerPartyService->removeMemberFromParty('Jack Frost', 'Party1');
+    echo $result['msg'] . "<br>";
+    echo "<br>";
+    
+    $enemyPartyService = new EnemyPartyService();
+
+    $result = $enemyPartyService->saveNewEnemyParty('Party1');
+    echo var_dump($result) . "<br>";
+    $result = $enemyPartyService->getEnemyPartyByName('Party1');
+    echo var_dump($result['party']) . "<br>";
+    echo "<br>";
+
+    $result = $enemyPartyService->addMemberToPartyByName('Izanagi', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $enemyPartyService->addMemberToPartyByName('Captian Kidd', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $enemyPartyService->addMemberToPartyByName('Zoro', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $enemyPartyService->addMemberToPartyByName('Carmen', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $enemyPartyService->addMemberToPartyByName('Jack Frost', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $enemyPartyService->removeMemberFromParty('Jack Frost', 'Party1');
     echo $result['msg'] . "<br>";
     echo "<br>";
 ?>
