@@ -68,14 +68,43 @@ class PlayerPartyService{
             $characterId = $character['CharacterId'];
             $partyId = $party['PlayerPartyId'];
 
-            //echo $characterId . "<br>" . $partyId . "<br>";
-
             if($partyMembersRepo->addMemberToParty($characterId, $partyId)){
                 $result['success'] = true;
                 $result['msg'] = $characterName . ' was added to ' . $partyName;
             }
             else {
                 $result['msg'] = $characterName . ' is already in ' . $partyName;
+            }
+
+            return $result;
+        }
+
+        public function removeMemberFromParty($characterName, $partyName){
+            $result = [
+                'success' => false
+            ];
+
+            $characterRepo = new CharacterRepository();
+            $partyRepo = new PlayerPartyRepository();
+            $partyMembersRepo = new PlayerPartyMembersRepository();
+
+            $character = $characterRepo->getCharacterByName($characterName);
+            $party = $partyRepo->getPartyByName($partyName);
+
+            if($character === false || $party === false){
+                $result['msg'] = 'Either Member or Party was not found';
+                return $result;
+            }
+
+            $characterId = $character['CharacterId'];
+            $partyId = $party['PlayerPartyId'];
+
+            if($partyMembersRepo->removeMemberFromParty($characterId, $partyId)){
+                $result['success'] = true;
+                $result['msg'] = $characterName . ' was removed from ' . $partyName;
+            }
+            else {
+                $result['msg'] = $characterName . ' is not in ' . $partyName;
             }
 
             return $result;

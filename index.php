@@ -35,5 +35,9 @@
     echo $result['msg'] . "<br>";
     $result = $playerPartyService->addMemberToPartyByName('Carmen', 'Party1');
     echo $result['msg'] . "<br>";
+    $result = $playerPartyService->addMemberToPartyByName('Jack Frost', 'Party1');
+    echo $result['msg'] . "<br>";
+    $result = $playerPartyService->removeMemberFromParty('Jack Frost', 'Party1');
+    echo $result['msg'] . "<br>";
     echo "<br>";
 ?>
