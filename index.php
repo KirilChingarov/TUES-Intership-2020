@@ -4,7 +4,7 @@
         require_once $class;
     });
 
-    use Model\Services\CharacterService;
+    /*use Model\Services\CharacterService;
     use Model\Services\PlayerPartyService;
     use Model\Services\EnemyPartyService;
 
@@ -62,5 +62,40 @@
     echo $result['msg'] . "<br>";
     $result = $enemyPartyService->removeMemberFromParty('Jack Frost', 'Party1');
     echo $result['msg'] . "<br>";
-    echo "<br>";
+    echo "<br>";*/
+
+    $fileNotFoundFlag = false;
+    $controllerName;
+    if(isset($_GET['target'])){
+        $controllerName = $_GET['target'];
+    }
+    else{
+        $controllerName = "index";
+    }
+    $methodName;
+    if(isset($_GET['action'])){
+        $methodName = $_GET['action'];
+    }
+    else{
+        $methodName = "home";
+    }
+
+    $controllerClassName = "\\Controller\\" . ucfirst($controllerName) . "Controller";
+
+    if(class_exists($controllerClassName)){
+        $controller = new $controllerClassName();
+        if (method_exists($controller, $methodName)) {
+            $controller->$methodName();
+        } else {
+            $controller = new Controller\IndexController();
+            $controller->error(404);
+        }
+    }
+    else{
+        $fileNotFoundFlag = true;
+    }
+
+    if($fileNotFoundFlag){
+        $controller->error(404);
+    }
 ?>
