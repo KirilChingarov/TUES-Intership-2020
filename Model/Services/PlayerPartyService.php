@@ -68,6 +68,14 @@ class PlayerPartyService{
             $characterId = $character['CharacterId'];
             $partyId = $party['PlayerPartyId'];
 
+            
+            $partyCap = (int)$partyMembersRepo->getMembersCount($partyId)['COUNT(*)'];
+
+            if($partyCap >= 4){
+                $result['msg'] = $partyName . ' is already full';
+                return $result;
+            }
+
             if($partyMembersRepo->addMemberToParty($characterId, $partyId)){
                 $result['success'] = true;
                 $result['msg'] = $characterName . ' was added to ' . $partyName;
@@ -99,6 +107,12 @@ class PlayerPartyService{
             $characterId = $character['CharacterId'];
             $partyId = $party['PlayerPartyId'];
 
+            $checkForMember = $partyMembersRepo->getMemberFromPartyById($characterId, $partyId);
+            if(!$checkForMember){
+                $result['msg'] = $characterName . ' was not found in ' . $partyName;
+                return $result;
+            }
+
             if($partyMembersRepo->removeMemberFromParty($characterId, $partyId)){
                 $result['success'] = true;
                 $result['msg'] = $characterName . ' was removed from ' . $partyName;
@@ -106,6 +120,38 @@ class PlayerPartyService{
             else {
                 $result['msg'] = $characterName . ' is not in ' . $partyName;
             }
+
+            return $result;
+        }
+
+        public function checkPlayerPartyCapacity($playerPartyName){
+            $result = [
+                'success' => false,
+                'msg' => $playerPartyName . ' was not found'
+            ];
+
+            $playerPartyRepo = new PlayerPartyRepository();
+            $playerPartyMembersRepo = new PlayerPartyMembersRepository();
+
+            $playerPartyId = $playerPartyRepo->getPartyByName($playerPartyName);
+            if($playerPartyId === false) return $result;
+
+            $playerPartyId = $playerPartyId['PlayerPartyId'];
+
+            $playerPartyMembersCount = $playerPartyMembersRepo->getMembersCount($playerPartyId);
+
+            //echo var_dump($playerPartyMembersCount) . "<br>";
+
+            if($playerPartyMembersCount == false){
+                $result['msg'] = $playerPartyName . 'was not found or it is empty';
+                return $result;
+            }
+
+            $playerPartyMembersCount = (int)$playerPartyMembersCount['COUNT(*)'];
+
+            $result['success'] = true;
+            $result['msg'] = $playerPartyName . ' was found';
+            $result['count'] = $playerPartyMembersCount;
 
             return $result;
         }

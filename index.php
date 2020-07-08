@@ -40,6 +40,8 @@
     echo $result['msg'] . "<br>";
     $result = $playerPartyService->removeMemberFromParty('Jack Frost', 'Party1');
     echo $result['msg'] . "<br>";
+    /*$result = $playerPartyService->checkPlayerPartyCapacity('Party1');
+    echo var_dump($result) . "<br>";*/
     echo "<br>";
     
     $enemyPartyService = new EnemyPartyService();
