@@ -5,6 +5,8 @@
     use Model\Repository\EnemyPartyRepository;
     use Model\Repository\EnemyPartyMembersRepository;
 
+    define('MAX_PARTY_MEMBERS_COUNT', 4);
+
     class EnemyPartyService{
         public function saveNewEnemyParty($partyName){
             $result = [
