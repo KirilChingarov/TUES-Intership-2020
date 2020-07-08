@@ -6,10 +6,14 @@
             $pdo = DBManager::getInstance()->getConnection();
 
             $sql = 'SELECT * FROM Characters
-            WHERE Name = ?';
+            WHERE Name = :name';
+
+            $targetCharacter = [
+                'name' => $characterName
+            ];
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$characterName]);
+            $stmt->execute($targetCharacter);
             return $stmt->fetch();
         }
 

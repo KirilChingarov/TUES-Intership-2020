@@ -16,10 +16,14 @@
             $pdo = DBManager::getInstance()->getConnection();
 
             $sql = 'SELECT * FROM PlayerParty
-            WHERE Name = ?';
+            WHERE Name = :playerPartyName';
+
+            $targetParty = [
+                'playerPartyName' => $partyName
+            ];
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$partyName]);
+            $stmt->execute($targetParty);
             return $stmt->fetch();
         }
 

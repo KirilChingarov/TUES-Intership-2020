@@ -67,11 +67,9 @@ class PlayerPartyService{
 
             $characterId = $character['CharacterId'];
             $partyId = $party['PlayerPartyId'];
-
             
-            $partyCap = (int)$partyMembersRepo->getMembersCount($partyId)['COUNT(*)'];
-
-            if($partyCap >= 4){
+            $partyCap = (int)$partyMembersRepo->getMembersCount($partyId)['membersCount'];
+            if($partyCap >= MAX_PARTY_MEMBERS_COUNT){
                 $result['msg'] = $partyName . ' is already full';
                 return $result;
             }
@@ -133,10 +131,10 @@ class PlayerPartyService{
             $playerPartyRepo = new PlayerPartyRepository();
             $playerPartyMembersRepo = new PlayerPartyMembersRepository();
 
-            $playerPartyId = $playerPartyRepo->getPartyByName($playerPartyName);
-            if($playerPartyId === false) return $result;
+            $playerParty = $playerPartyRepo->getPartyByName($playerPartyName);
+            if($playerParty === false) return $result;
 
-            $playerPartyId = $playerPartyId['PlayerPartyId'];
+            $playerPartyId = $playerParty['PlayerPartyId'];
 
             $playerPartyMembersCount = $playerPartyMembersRepo->getMembersCount($playerPartyId);
 

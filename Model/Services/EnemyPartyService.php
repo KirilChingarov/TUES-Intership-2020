@@ -68,8 +68,8 @@
             $characterId = $character['CharacterId'];
             $partyId = $party['EnemyPartyId'];
 
-            $membersCount = (int)$partyMembersRepo->getMembersCount($partyId)['COUNT(*)'];
-            if($membersCount >= 4){
+            $membersCount = (int)$partyMembersRepo->getMembersCount($partyId)['membersCount'];
+            if($membersCount >= MAX_PARTY_MEMBERS_COUNT){
                 $result['msg'] = 'Enemy party ' . $partyName . ' is full';
                 return $result;
             }

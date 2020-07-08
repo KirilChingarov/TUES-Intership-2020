@@ -6,31 +6,45 @@
             $pdo = DBManager::getInstance()->getConnection();
 
             $sql = 'INSERT INTO EnemyPartyMembers(EnemyPartyId, CharacterId)
-            VALUES(?, ?)';
+            VALUES(:enemyPartyId, :characterId)';
+
+            $newMember = [
+                'enemyPartyId' => $enemyPartyId,
+                'characterId' => $characterId
+            ];
 
             $stmt = $pdo->prepare($sql);
-            return $stmt->execute([$enemyPartyId, $characterId]);
+            return $stmt->execute($newMember);
         }
 
         public function removeMemberFromParty($characterId, $enemyPartyId){
             $pdo = DBManager::getInstance()->getConnection();
 
             $sql = 'DELETE FROM EnemyPartyMembers
-            WHERE EnemyPartyId = ? AND CharacterId = ?
+            WHERE EnemyPartyId = :enemyPartyId AND CharacterId = :characterId
             LIMIT 1';
 
+            $targetMember = [
+                'enemyPartyId' => $enemyPartyId,
+                'characterId' => $characterId,
+            ];
+
             $stmt = $pdo->prepare($sql);
-            return $stmt->execute([$enemyPartyId, $characterId]);
+            return $stmt->execute($targetMember);
         }
 
         public function getMembersCount($enemyPartyId){
             $pdo = DBManager::getInstance()->getConnection();
 
-            $sql = 'SELECT COUNT(*) FROM EnemyPartyMembers
-            WHERE EnemyPartyId = ?';
+            $sql = 'SELECT COUNT(*) AS membersCount FROM EnemyPartyMembers
+            WHERE EnemyPartyId = :enemyPartyId';
+
+            $targetEnemyParty = [
+                'enemyPartyId' => $enemyPartyId
+            ];
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$enemyPartyId]);
+            $stmt->execute($targetEnemyParty);
             return $stmt->fetch();
         }
 
@@ -38,10 +52,15 @@
             $pdo = DBManager::getInstance()->getConnection();
 
             $sql = 'SELECT * FROM EnemyPartyMembers
-            WHERE EnemyPartyId = ? AND CharacterId = ?';
+            WHERE EnemyPartyId = :enemyPartyId AND CharacterId = :characterId';
+
+            $targetMember = [
+                'enemyPartyId' => $enemyPartyId,
+                'characterId' => $characterId
+            ];
 
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$enemyPartyId, $characterId]);
+            $stmt->execute($targetMember);
             return $stmt->fetch();
         }
     }
