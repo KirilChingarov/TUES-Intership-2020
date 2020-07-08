@@ -68,6 +68,12 @@
             $characterId = $character['CharacterId'];
             $partyId = $party['EnemyPartyId'];
 
+            $membersCount = (int)$partyMembersRepo->getMembersCount($partyId)['COUNT(*)'];
+            if($membersCount >= 4){
+                $result['msg'] = 'Enemy party ' . $partyName . ' is full';
+                return $result;
+            }
+
             if($partyMembersRepo->addMemberToParty($characterId, $partyId)){
                 $result['success'] = true;
                 $result['msg'] = $characterName . ' was added to ' . $partyName;
@@ -98,6 +104,12 @@
 
             $characterId = $character['CharacterId'];
             $partyId = $party['EnemyPartyId'];
+
+            $checkForMember = $partyMembersRepo->getMemberFromEnemyPartyById($characterId, $partyId);
+            if(!$checkForMember){
+                $result['msg'] = $characterName . ' was not found in enemy party ' . $partyName;
+                return $result;
+            }
 
             if($partyMembersRepo->removeMemberFromParty($characterId, $partyId)){
                 $result['success'] = true;

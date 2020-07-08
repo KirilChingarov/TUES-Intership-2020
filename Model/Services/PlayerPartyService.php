@@ -140,8 +140,6 @@ class PlayerPartyService{
 
             $playerPartyMembersCount = $playerPartyMembersRepo->getMembersCount($playerPartyId);
 
-            //echo var_dump($playerPartyMembersCount) . "<br>";
-
             if($playerPartyMembersCount == false){
                 $result['msg'] = $playerPartyName . 'was not found or it is empty';
                 return $result;
