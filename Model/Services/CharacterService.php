@@ -40,14 +40,39 @@
             ];
 
             $repo = new CharacterRepository();
-            $character = $repo->getCharacterByName($characterName);
+            $characterRes = $repo->getCharacterByName($characterName);
 
-            if($character){
+            if($characterRes){
                 $result['success'] = true;
                 $result['msg'] = 'Character has been found';
+
+                $character = [
+                    'characterId' => (int)$characterRes['CharacterId'],
+                    'characterName' => $characterRes['Name'],
+                    'characterHealth' => (int)$characterRes['Health'],
+                    'characterAttackDamage' => (int)$characterRes['AttackDamage'],
+                    'characterMana' => (int)$characterRes['Mana']
+                ];
+
                 $result['character'] = $character;
             }
 
+            return $result;
+        }
+
+        public function updateCharacter($character){
+            $result = [
+                'success' => false,
+                'msg' => 'Character was not able to be updated'
+            ];
+
+            $repo = new CharacterRepository();
+
+            if($repo->updateCharacter($character)){
+                $result['success'] = true;
+                $result['msg'] = 'Character Updated successfully';
+            }
+            
             return $result;
         }
     }

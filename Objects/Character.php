@@ -1,7 +1,9 @@
 <?php
     namespace Objects;
 
-    class Character{
+use Model\Services\CharacterService;
+
+class Character{
         private $characterId;
         private $characterName;
         private $characterHealth;
@@ -48,6 +50,38 @@
             $this->characterMana = $characterMana;
         }
 
+        public function getCharacterId(){
+            return $this->characterId;
+        }
 
+        public function setCharacterId($characterId){
+            $this->characterId = $characterId;
+        }
+
+        public static function createCharacter($character){
+            $newCharacter = new Character($character['characterId'], $character['characterName'], 
+                                        $character['characterHealth'], $character['characterAttackDamage'], 
+                                        $character['characterMana']);
+
+            return $newCharacter;
+        }
+
+        public function takeDamage(INT $damage){
+            $this->characterHealth -= $damage;
+
+            $characterService = new CharacterService();
+
+            $character = [
+                'characterId' => $this->characterId,
+                'characterName' => $this->characterName,
+                'characterHealth' => $this->characterHealth,
+                'characterAttackDamage' => $this->characterAttackDamage,
+                'characterMana' => $this->characterMana
+            ];
+
+            $result = $characterService->updateCharacter($character);
+
+            return $result;
+        }
     }
 ?>
