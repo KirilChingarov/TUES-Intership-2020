@@ -4,66 +4,6 @@
         require_once $class;
     });
 
-    /*use Model\Services\CharacterService;
-    use Model\Services\PlayerPartyService;
-    use Model\Services\EnemyPartyService;
-
-    $characterService = new CharacterService();
-
-    $result = $characterService->saveCharacter('Captian Kidd', 200, 8, 42);
-    echo $result['msg'] . "<br>";
-    $result = $characterService->saveCharacter('Carmen', 150, 10, 60);
-    echo $result['msg'] . "<br>"; 
-    $result = $characterService->saveCharacter('Zoro', 140, 11, 70);
-    echo $result['msg'] . "<br>";  
-    $result = $characterService->saveCharacter('Izanagi', 180, 15, 40);
-    echo $result['msg'] . "<br>";
-    echo "<br>";
-
-    $playerPartyService = new PlayerPartyService();
-
-    $result = $playerPartyService->saveNewParty('Party1');
-    echo $result['msg'] . "<br>";
-    $result = $playerPartyService->getPartyByName('Party1');
-    echo $result['msg'] . "<br>";
-    echo "<br>";
-
-    $result = $playerPartyService->addMemberToPartyByName('Izanagi', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $playerPartyService->addMemberToPartyByName('Captian Kidd', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $playerPartyService->addMemberToPartyByName('Zoro', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $playerPartyService->addMemberToPartyByName('Carmen', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $playerPartyService->addMemberToPartyByName('Jack Frost', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $playerPartyService->removeMemberFromParty('Jack Frost', 'Party1');
-    echo $result['msg'] . "<br>";
-    echo "<br>";
-    
-    $enemyPartyService = new EnemyPartyService();
-
-    $result = $enemyPartyService->saveNewEnemyParty('Party1');
-    echo $result['msg'] . "<br>";
-    $result = $enemyPartyService->getEnemyPartyByName('Party1');
-    echo $result['msg'] . "<br>";
-    echo "<br>";
-
-    $result = $enemyPartyService->addMemberToPartyByName('Izanagi', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $enemyPartyService->addMemberToPartyByName('Captian Kidd', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $enemyPartyService->addMemberToPartyByName('Zoro', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $enemyPartyService->addMemberToPartyByName('Carmen', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $enemyPartyService->addMemberToPartyByName('Jack Frost', 'Party1');
-    echo $result['msg'] . "<br>";
-    $result = $enemyPartyService->removeMemberFromParty('Jack Frost', 'Party1');
-    echo $result['msg'] . "<br>";
-    echo "<br>";*/
-
     $fileNotFoundFlag = false;
     $controllerName;
     if(isset($_GET['target'])){
