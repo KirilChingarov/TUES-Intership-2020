@@ -17,7 +17,7 @@
 
             $testCharacter = Character::createCharacter($character);
 
-            echo json_encode(var_dump($testCharacter), JSON_PRETTY_PRINT);
+            var_dump($testCharacter);
         }
 
         public function characterTakeDamage(){
@@ -30,20 +30,20 @@
 
             $testCharacter = Character::createCharacter($character);
 
-            echo json_encode(var_dump($testCharacter), JSON_PRETTY_PRINT);
+            var_dump($testCharacter);
 
             $damage = $_POST['damage'];
 
             $testCharacter->takeDamage($damage);
 
-            echo json_encode(var_dump($testCharacter), JSON_PRETTY_PRINT);
+            var_dump($testCharacter);
         }
 
         public function createPlayerParty(){
             $playerPartyName = $_POST['playerPartyName'];
             $playerParty = PlayerParty::createPlayerParty($playerPartyName);
 
-            echo json_encode(var_dump($playerParty), JSON_PRETTY_PRINT);
+            var_dump($playerParty);
         }
 
         public function addMemberToPlayerParty(){
@@ -58,8 +58,8 @@
 
             $result = $playerParty->addMemberToParty($character);
 
-            echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
-            echo json_encode(var_dump($playerParty->members), JSON_PRETTY_PRINT);
+            var_dump($result);
+            var_dump($playerParty->members);
         }
 
         public function removeMemberFromPlayerParty(){
@@ -74,15 +74,15 @@
 
             $result = $playerParty->removeMemberFromParty($character);
 
-            echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
-            echo json_encode(var_dump($playerParty->members), JSON_PRETTY_PRINT);
+            var_dump($result);
+            var_dump($playerParty->members);
         }
 
         public function createEnemyParty(){
             $enemyPartyName = $_POST['enemyPartyName'];
             $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
 
-            echo json_encode(var_dump($enemyParty), JSON_PRETTY_PRINT);
+            var_dump($enemyParty);
         }
 
         public function addMemberToEnemyParty(){
@@ -97,8 +97,8 @@
 
             $result = $enemyParty->addMemberToEnemyParty($character);
 
-            echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
-            echo json_encode(var_dump($enemyParty->members), JSON_PRETTY_PRINT);
+            var_dump($result);
+            var_dump($enemyParty->members);
         }
 
         public function removeMemberFromEnemyParty(){
@@ -113,8 +113,8 @@
 
             $result = $enemyParty->removeMemberFromEnemyParty($character);
 
-            echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
-            echo json_encode(var_dump($enemyParty->members), JSON_PRETTY_PRINT);
+            var_dump($result);
+            var_dump($enemyParty->members);
         }
     }
 ?>

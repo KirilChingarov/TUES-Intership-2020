@@ -42,15 +42,16 @@
             $partyRes = $repo->getEnemyPartyByName($partyName);
 
             if($partyRes){
-                $result['success'] = true;
-                $result['msg'] = 'Party found';
-
                 $party = [
                     'enemyPartyName' => $partyRes['Name'],
                     'enemyPartyId' => $partyRes['EnemyPartyId']
                 ];
 
-                $result['party'] = $party;
+                $result = [
+                    'success' => true,
+                    'msg' => 'Party found',
+                    'party' => $party
+                ];
             }
 
             return $result;
@@ -143,7 +144,7 @@
                     'enemyPartyId' => (int)$epm['EnemyPartyId'],
                     'characterId' => (int)$epm['CharacterId']
                 ];
-                array_push($enemyPartyMembers, $enemyPartyMember);
+                $enemyPartyMembers[] = $enemyPartyMember;
             }
 
             return $enemyPartyMembers;

@@ -49,10 +49,15 @@
         public function updateCharacter($character){
             $pdo = DBManager::getInstance()->getConnection();
 
-            $sql = 'UPDATE Characters
-            SET Name = :characterName, Health = :characterHealth, 
-            AttackDamage = :characterAttackDamage, Mana = :characterMana
-            WHERE CharacterId = :characterId';
+            $sql = 'UPDATE 
+                Characters
+            SET 
+                Name = :characterName, 
+                Health = :characterHealth, 
+                AttackDamage = :characterAttackDamage, 
+                Mana = :characterMana
+            WHERE 
+                CharacterId = :characterId';
 
             $stmt = $pdo->prepare($sql);
             return $stmt->execute($character);

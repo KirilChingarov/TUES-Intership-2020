@@ -42,15 +42,16 @@
             $partyRes = $repo->getPartyByName($partyName);
 
             if($partyRes){
-                $result['success'] = true;
-                $result['msg'] = 'Party found';
-
                 $party = [
                     'playerPartyName' => $partyRes['Name'],
                     'playerPartyId' => $partyRes['PlayerPartyId']
                 ];
 
-                $result['party'] = $party;
+                $result = [
+                    'success' => true,
+                    'msg' => 'Party found',
+                    'party' => $party
+                ];
             }
 
             return $result;
@@ -169,8 +170,6 @@
         public function getPlayerPartyMembers($playerPartyName){
             $playerParty = $this->getPartyByName($playerPartyName);
 
-            //echo json_encode($playerParty, JSON_PRETTY_PRINT);
-
             $playerPartyMembersRepo = new PlayerPartyMembersRepository();
 
             $playerPartyMembersIds = $playerPartyMembersRepo->getMembersFromParty($playerParty['party']['playerPartyId']);
@@ -181,10 +180,8 @@
                     'playerPartyId' => (int)$ppm['PlayerPartyId'],
                     'characterId' => (int)$ppm['CharacterId']
                 ];
-                array_push($playerPartyMembers, $playerPartyMember);
+                $playerPartyMembers[] = $playerPartyMember;
             }
-
-            //echo json_encode(var_dump($playerPartyMembers), JSON_PRETTY_PRINT);
 
             return $playerPartyMembers;
         }
