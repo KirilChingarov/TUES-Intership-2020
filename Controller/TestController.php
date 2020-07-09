@@ -1,12 +1,13 @@
 <?php
     namespace Controller;
 
-use Model\Services\CharacterService;
-use Model\Services\PlayerPartyService;
-use Objects\Character;
-use Objects\PlayerParty;
+    use Model\Services\CharacterService;
+    use Model\Services\PlayerPartyService;
+    use Objects\Character;
+    use Objects\PlayerParty;
+    use Objects\EnemyParty;
 
-class TestController{
+    class TestController{
         public function createCharacter(){
             $character = [
                 'characterName' => 'Goemon',
@@ -76,6 +77,13 @@ class TestController{
 
             echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
             echo json_encode(var_dump($playerParty->members), JSON_PRETTY_PRINT);
+        }
+
+        public function createEnemyParty(){
+            $enemyPartyName = $_POST['enemyPartyName'];
+            $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
+
+            echo json_encode(var_dump($enemyParty), JSON_PRETTY_PRINT);
         }
     }
 ?>

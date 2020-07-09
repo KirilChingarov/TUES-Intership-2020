@@ -39,11 +39,17 @@
             ];
 
             $repo = new EnemyPartyRepository();
-            $party = $repo->getEnemyPartyByName($partyName);
+            $partyRes = $repo->getEnemyPartyByName($partyName);
 
-            if($party){
+            if($partyRes){
                 $result['success'] = true;
                 $result['msg'] = 'Party found';
+
+                $party = [
+                    'enemyPartyName' => $partyRes['Name'],
+                    'enemyPartyId' => $partyRes['EnemyPartyId']
+                ];
+
                 $result['party'] = $party;
             }
 
@@ -122,6 +128,25 @@
             }
 
             return $result;
+        }
+
+        public function getEnemyPartyMembers($enemyPartyName){
+            $enemyParty = $this->getEnemyPartyByName($enemyPartyName);
+
+            $enemyPartyMembersRepo = new EnemyPartyMembersRepository();
+
+            $enemyPartyMembersIds = $enemyPartyMembersRepo->getMembersFromEnemyParty($enemyParty['party']['enemyPartyId']);
+
+            $enemyPartyMembers = [];
+            foreach($enemyPartyMembersIds as $epm){
+                $enemyPartyMember = [
+                    'enemyPartyId' => (int)$epm['EnemyPartyId'],
+                    'characterId' => (int)$epm['CharacterId']
+                ];
+                array_push($enemyPartyMembers, $enemyPartyMember);
+            }
+
+            return $enemyPartyMembers;
         }
     }
 ?>

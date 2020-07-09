@@ -35,10 +35,9 @@ use Model\Services\PlayerPartyService;
         public static function createPlayerParty($playerPartyName){
             $playerPartyRepo = new PlayerPartyRepository();
             $playerPartyService = new PlayerPartyService();
+            $characterService = new CharacterService();
 
             $newPlayerParty = new PlayerParty($playerPartyName);
-
-            $characterService = new CharacterService();
 
             if($playerPartyRepo->checkPartyName($playerPartyName)){
                 $playerPartyMembers = $playerPartyService->getPlayerPartyMembers($playerPartyName);
