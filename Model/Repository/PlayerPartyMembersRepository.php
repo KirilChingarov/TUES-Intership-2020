@@ -62,5 +62,18 @@
             $stmt->execute($targetMember);
             return $stmt->fetch();
         }
+
+        public function getMembersFromParty($playerPartyId){
+            $pdo = DBManager::getInstance()->getConnection();
+
+            $sql = 'SELECT * FROM PlayerPartyMembers
+            WHERE PlayerPartyId = :playerPartyId';
+
+            $playerParty = ['playerPartyId' => $playerPartyId];
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($playerParty);
+            return $stmt->fetchAll();
+        }
     }
 ?>

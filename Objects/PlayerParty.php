@@ -3,13 +3,14 @@
 
     use Controller\PlayerPartyController;
     use Model\Repository\PlayerPartyRepository;
-    use Model\Services\PlayerPartyService;
+use Model\Services\CharacterService;
+use Model\Services\PlayerPartyService;
     use Objects\Character;
 
     class PlayerParty{
         private $playerPartyId;
         private $playerPartyName;
-        private $members = array();
+        public $members = array();
 
         private function __construct($playerPartyName){
             $this->playerPartyName = $playerPartyName;
@@ -37,11 +38,23 @@
 
             $newPlayerParty = new PlayerParty($playerPartyName);
 
-            if(!$playerPartyRepo->checkPartyName($playerPartyName)){
+            $characterService = new CharacterService();
+
+            if($playerPartyRepo->checkPartyName($playerPartyName)){
+                $playerPartyMembers = $playerPartyService->getPlayerPartyMembers($playerPartyName);
+                foreach($playerPartyMembers as $ppm){
+                    $character = $characterService->getCharacterById($ppm['characterId']);
+
+                    $tmpCharacter = Character::createCharacter($character['character']);
+
+                    array_push($newPlayerParty->members, $tmpCharacter);
+                }
+            }
+            else{
                 $playerPartyService->saveNewParty($playerPartyName);
             }
 
-            $newPlayerPartyId = $playerPartyService->getPartyByName($playerPartyName)['party']['PlayerPartyId'];
+            $newPlayerPartyId = (int)$playerPartyService->getPartyByName($playerPartyName)['party']['playerPartyId'];
             $newPlayerParty->setPlayerPartyId($newPlayerPartyId);
 
             return $newPlayerParty;

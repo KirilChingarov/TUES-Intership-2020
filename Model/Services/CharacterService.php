@@ -60,6 +60,33 @@
             return $result;
         }
 
+        public function getCharacterById($characterId){
+            $result = [
+                'success' => false,
+                'msg' => 'Character has not been found',
+            ];
+
+            $repo = new CharacterRepository();
+            $characterRes = $repo->getCharacterById($characterId);
+
+            if($characterRes){
+                $result['success'] = true;
+                $result['msg'] = 'Character has been found';
+
+                $character = [
+                    'characterId' => (int)$characterRes['CharacterId'],
+                    'characterName' => $characterRes['Name'],
+                    'characterHealth' => (int)$characterRes['Health'],
+                    'characterAttackDamage' => (int)$characterRes['AttackDamage'],
+                    'characterMana' => (int)$characterRes['Mana']
+                ];
+
+                $result['character'] = $character;
+            }
+
+            return $result;
+        }
+
         public function updateCharacter($character){
             $result = [
                 'success' => false,

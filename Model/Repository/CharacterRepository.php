@@ -17,6 +17,21 @@
             return $stmt->fetch();
         }
 
+        public function getCharacterById($characterId){
+            $pdo = DBManager::getInstance()->getConnection();
+
+            $sql = 'SELECT * FROM Characters
+            WHERE CharacterId = :Id';
+
+            $targetCharacter = [
+                'Id' => $characterId
+            ];
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($targetCharacter);
+            return $stmt->fetch();
+        }
+
         public function saveCharacter($character){
             $pdo = DBManager::getInstance()->getConnection();
 

@@ -39,11 +39,17 @@
             ];
 
             $repo = new PlayerPartyRepository();
-            $party = $repo->getPartyByName($partyName);
+            $partyRes = $repo->getPartyByName($partyName);
 
-            if($party){
+            if($partyRes){
                 $result['success'] = true;
                 $result['msg'] = 'Party found';
+
+                $party = [
+                    'playerPartyName' => $partyRes['Name'],
+                    'playerPartyId' => $partyRes['PlayerPartyId']
+                ];
+
                 $result['party'] = $party;
             }
 
@@ -67,7 +73,7 @@
                 return $result;
             }
 
-            $characterId = $character['characterId'];
+            $characterId = $character['CharacterId'];
             $partyId = $party['PlayerPartyId'];
             
             $partyCap = (int)$partyMembersRepo->getMembersCount($partyId)['membersCount'];
@@ -104,7 +110,7 @@
                 return $result;
             }
 
-            $characterId = $character['characterId'];
+            $characterId = $character['CharacterId'];
             $partyId = $party['PlayerPartyId'];
 
             $checkForMember = $partyMembersRepo->getMemberFromPartyById($characterId, $partyId);
@@ -158,6 +164,29 @@
             $repo = new PlayerPartyRepository();
 
             return $repo->getPlayerPartyCount();
+        }
+
+        public function getPlayerPartyMembers($playerPartyName){
+            $playerParty = $this->getPartyByName($playerPartyName);
+
+            //echo json_encode($playerParty, JSON_PRETTY_PRINT);
+
+            $playerPartyMembersRepo = new PlayerPartyMembersRepository();
+
+            $playerPartyMembersIds = $playerPartyMembersRepo->getMembersFromParty($playerParty['party']['playerPartyId']);
+
+            $playerPartyMembers = [];
+            foreach($playerPartyMembersIds as $ppm){
+                $playerPartyMember = [
+                    'playerPartyId' => (int)$ppm['PlayerPartyId'],
+                    'characterId' => (int)$ppm['CharacterId']
+                ];
+                array_push($playerPartyMembers, $playerPartyMember);
+            }
+
+            //echo json_encode(var_dump($playerPartyMembers), JSON_PRETTY_PRINT);
+
+            return $playerPartyMembers;
         }
     }
 ?>
