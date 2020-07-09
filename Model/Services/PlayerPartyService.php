@@ -67,7 +67,7 @@
                 return $result;
             }
 
-            $characterId = $character['CharacterId'];
+            $characterId = $character['characterId'];
             $partyId = $party['PlayerPartyId'];
             
             $partyCap = (int)$partyMembersRepo->getMembersCount($partyId)['membersCount'];
@@ -104,7 +104,7 @@
                 return $result;
             }
 
-            $characterId = $character['CharacterId'];
+            $characterId = $character['characterId'];
             $partyId = $party['PlayerPartyId'];
 
             $checkForMember = $partyMembersRepo->getMemberFromPartyById($characterId, $partyId);
@@ -152,6 +152,12 @@
             $result['count'] = $playerPartyMembersCount;
 
             return $result;
+        }
+
+        public function getPlayerPartyCount(){
+            $repo = new PlayerPartyRepository();
+
+            return $repo->getPlayerPartyCount();
         }
     }
 ?>

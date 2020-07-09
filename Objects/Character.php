@@ -10,8 +10,7 @@ class Character{
         private $characterAttackDamage;
         private $characterMana;
 
-        private function __construct($characterId, $characterName, $characterHealth, $characterAttackDamage, $characterMana){
-            $this->characterId = $characterId;
+        private function __construct($characterName, $characterHealth, $characterAttackDamage, $characterMana){
             $this->characterName = $characterName;
             $this->characterHealth = $characterHealth;
             $this->characterAttackDamage = $characterAttackDamage;
@@ -59,9 +58,27 @@ class Character{
         }
 
         public static function createCharacter($character){
-            $newCharacter = new Character($character['characterId'], $character['characterName'], 
-                                        $character['characterHealth'], $character['characterAttackDamage'], 
-                                        $character['characterMana']);
+            $newCharacter = new Character($character['characterName'], $character['characterHealth'], 
+            $character['characterAttackDamage'], $character['characterMana']);
+
+            $characterService = new CharacterService();
+
+            $result = $characterService->getCharacterByName($character['characterName']);
+
+            if($result['success'] === true){
+                $newCharacter->setCharacterId($result['character']['characterId']);
+                $newCharacter->setCharacterHealth($result['character']['characterHealth']);
+                $newCharacter->setCharacterAttackDamage($result['character']['characterAttackDamage']);
+                $newCharacter->setCharacterMana($result['character']['characterMana']);
+            }
+            else{
+                $characterService->saveCharacter($character['characterName'], $character['characterHealth'], 
+                $character['characterAttackDamage'], $character['characterMana']);
+
+                $result = $characterService->getCharacterByName($character['characterName']);
+
+                $newCharacter->setCharacterId($result['character']['characterId']);
+            }
 
             return $newCharacter;
         }
