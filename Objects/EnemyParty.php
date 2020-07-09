@@ -56,5 +56,30 @@ use Model\Services\EnemyPartyService;
 
             return $newEnemyParty;
         }
+
+        public function addMemberToEnemyParty(Character $character){
+            $enemyPartyService = new EnemyPartyService();
+
+            $result = $enemyPartyService->addMemberToPartyByName($character->getCharacterName(), $this->enemyPartyName);
+
+            if($result['success']){
+                array_push($this->members, $character);
+            }
+
+            return $result;
+        }
+
+        public function removeMemberFromEnemyParty(Character $character){
+            $enemyPartyService = new EnemyPartyService();
+
+            $result = $enemyPartyService->removeMemberFromParty($character->getCharacterName(), $this->enemyPartyName);
+
+            if($result['success']){
+                $characterMemberKey = (int)array_search($character, $this->members);
+                array_splice($this->members, $characterMemberKey, 1);
+            }
+
+            return $result;
+        }
     }
 ?>

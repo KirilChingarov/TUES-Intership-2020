@@ -85,5 +85,37 @@
 
             echo json_encode(var_dump($enemyParty), JSON_PRETTY_PRINT);
         }
+
+        public function addMemberToEnemyParty(){
+            $enemyPartyName = $_POST['enemyPartyName'];
+            $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
+
+            $characterService = new CharacterService();
+
+            $characterName = $_POST['characterName'];
+            $character = $characterService->getCharacterByName($characterName)['character'];
+            $character = Character::createCharacter($character);
+
+            $result = $enemyParty->addMemberToEnemyParty($character);
+
+            echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
+            echo json_encode(var_dump($enemyParty->members), JSON_PRETTY_PRINT);
+        }
+
+        public function removeMemberFromEnemyParty(){
+            $enemyPartyName = $_POST['enemyPartyName'];
+            $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
+
+            $characterService = new CharacterService();
+
+            $characterName = $_POST['characterName'];
+            $character = $characterService->getCharacterByName($characterName)['character'];
+            $character = Character::createCharacter($character);
+
+            $result = $enemyParty->removeMemberFromEnemyParty($character);
+
+            echo json_encode(var_dump($result), JSON_PRETTY_PRINT);
+            echo json_encode(var_dump($enemyParty->members), JSON_PRETTY_PRINT);
+        }
     }
 ?>
