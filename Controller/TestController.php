@@ -2,7 +2,6 @@
     namespace Controller;
 
     use Model\Services\CharacterService;
-    use Model\Services\PlayerPartyService;
     use Objects\Character;
     use Objects\PlayerParty;
     use Objects\EnemyParty;

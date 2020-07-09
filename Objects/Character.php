@@ -9,6 +9,7 @@ class Character{
         private $characterHealth;
         private $characterAttackDamage;
         private $characterMana;
+        private bool $isDead = false;
 
         private function __construct($characterName, $characterHealth, $characterAttackDamage, $characterMana){
             $this->characterName = $characterName;
@@ -86,6 +87,16 @@ class Character{
         public function takeDamage(INT $damage){
             $this->characterHealth -= $damage;
 
+            if($this->characterHealth <= 0){
+                $this->isDead = true;
+            }
+        }
+
+        public function isCharacterDead(){
+            return $this->isDead;
+        }
+
+        public function updateCharacterInfo(){
             $characterService = new CharacterService();
 
             $character = [
