@@ -79,7 +79,7 @@ use Model\Services\PlayerPartyService;
 
             if($result['success']){
                 $characterMemberKey = (int)array_search($character, $this->members);
-                $this->members = array_splice($this->members, $characterMemberKey, 1);
+                array_splice($this->members, $characterMemberKey, 1);
             }
 
             return $result;
