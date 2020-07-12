@@ -1,9 +1,10 @@
 <?php
     namespace Controller;
 
-use Model\Services\CharacterService;
+    use Model\Services\CharacterService;
+    use Model\Objects\Character;
 
-class CharacterController{
+    class CharacterController{
         public function addCharacter(){
             $result = [
                 'success' => false
@@ -50,7 +51,8 @@ class CharacterController{
             $characterService = new CharacterService();
             $result = $characterService->getCharacterByName($characterName);
 
-            echo json_encode($result, JSON_PRETTY_PRINT);
+            var_dump($result);
+
             return $result;
         }
 

@@ -30,5 +30,15 @@
         public function checkPartyName($partyName){
             return $this->getPartyByName($partyName);
         }
+
+        public function getPlayerPartyCount(){
+            $pdo = DBManager::getInstance()->getConnection();
+
+            $sql = 'SELECT COUNT(*) AS playerPartyCount FROM PlayerParty';
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            return (int)$stmt->fecth()['playerPartyCount'];
+        }
     }
 ?>

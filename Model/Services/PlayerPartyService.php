@@ -1,6 +1,7 @@
 <?php
     namespace Model\Services;
 
+    use Model\Objects\PlayerParty;
     use Model\Repository\PlayerPartyRepository;
     use Model\Repository\CharacterRepository;
     use Model\Repository\PlayerPartyMembersRepository;
@@ -39,12 +40,31 @@
             ];
 
             $repo = new PlayerPartyRepository();
-            $party = $repo->getPartyByName($partyName);
+            $partyRes = $repo->getPartyByName($partyName);
 
-            if($party){
-                $result['success'] = true;
-                $result['msg'] = 'Party found';
-                $result['party'] = $party;
+            if($partyRes){
+                $partyInfo = [
+                    'playerPartyName' => $partyRes['Name'],
+                    'playerPartyId' => (int)$partyRes['PlayerPartyId']
+                ];
+
+                $party = new PlayerParty($partyName, $partyInfo['playerPartyId']);
+
+                $characterService = new CharacterService();
+                $playerPartyMembers = $this->getPlayerPartyMembers($partyInfo['playerPartyId']);
+                foreach($playerPartyMembers as $ppm){
+                    $character = $characterService->getCharacterById($ppm['characterId'])['character'];
+
+                    $party->addMemberToParty($character);
+                    $this->addMemberToPartyByName($character->getCharacterName(), $partyName);
+                }
+
+
+                $result = [
+                    'success' => true,
+                    'msg' => 'Party found',
+                    'party' => $party
+                ];
             }
 
             return $result;
@@ -152,6 +172,29 @@
             $result['count'] = $playerPartyMembersCount;
 
             return $result;
+        }
+
+        public function getPlayerPartyCount(){
+            $repo = new PlayerPartyRepository();
+
+            return $repo->getPlayerPartyCount();
+        }
+
+        public function getPlayerPartyMembers($playerPartyId){
+            $playerPartyMembersRepo = new PlayerPartyMembersRepository();
+
+            $playerPartyMembersIds = $playerPartyMembersRepo->getMembersFromParty($playerPartyId);
+
+            $playerPartyMembers = [];
+            foreach($playerPartyMembersIds as $ppm){
+                $playerPartyMember = [
+                    'playerPartyId' => (int)$ppm['PlayerPartyId'],
+                    'characterId' => (int)$ppm['CharacterId']
+                ];
+                $playerPartyMembers[] = $playerPartyMember;
+            }
+
+            return $playerPartyMembers;
         }
     }
 ?>

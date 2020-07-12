@@ -4,8 +4,9 @@
     use Model\Repository\CharacterRepository;
     use Model\Repository\EnemyPartyRepository;
     use Model\Repository\EnemyPartyMembersRepository;
+    use Model\Objects\EnemyParty;
 
-    define('MAX_PARTY_MEMBERS_COUNT', 4);
+define('MAX_PARTY_MEMBERS_COUNT', 4);
 
     class EnemyPartyService{
         public function saveNewEnemyParty($partyName){
@@ -39,12 +40,30 @@
             ];
 
             $repo = new EnemyPartyRepository();
-            $party = $repo->getEnemyPartyByName($partyName);
+            $partyRes = $repo->getEnemyPartyByName($partyName);
 
-            if($party){
-                $result['success'] = true;
-                $result['msg'] = 'Party found';
-                $result['party'] = $party;
+            if($partyRes){
+                $partyInfo = [
+                    'enemyPartyName' => $partyRes['Name'],
+                    'enemyPartyId' => (int)$partyRes['EnemyPartyId']
+                ];
+
+                $party = new EnemyParty($partyName, $partyInfo['enemyPartyId']);
+
+                $characterService = new CharacterService();
+                $enemyPartyMembers = $this->getEnemyPartyMembers($partyInfo['enemyPartyId']);
+                foreach($enemyPartyMembers as $epm){
+                    $character = $characterService->getCharacterById($epm['characterId'])['character'];
+
+                    $party->addMemberToEnemyParty($character);
+                    $this->addMemberToPartyByName($character->getCharacterName(), $partyName);
+                }
+
+                $result = [
+                    'success' => true,
+                    'msg' => 'Party found',
+                    'party' => $party
+                ];
             }
 
             return $result;
@@ -122,6 +141,23 @@
             }
 
             return $result;
+        }
+
+        public function getEnemyPartyMembers($enemyPartyId){
+            $enemyPartyMembersRepo = new EnemyPartyMembersRepository();
+
+            $enemyPartyMembersIds = $enemyPartyMembersRepo->getMembersFromEnemyParty($enemyPartyId);
+
+            $enemyPartyMembers = [];
+            foreach($enemyPartyMembersIds as $epm){
+                $enemyPartyMember = [
+                    'enemyPartyId' => (int)$epm['EnemyPartyId'],
+                    'characterId' => (int)$epm['CharacterId']
+                ];
+                $enemyPartyMembers[] = $enemyPartyMember;
+            }
+
+            return $enemyPartyMembers;
         }
     }
 ?>

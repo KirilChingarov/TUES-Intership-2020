@@ -42,7 +42,7 @@ class PlayerPartyController{
             $playerPartyService = new PlayerPartyService();
             $result = $playerPartyService->getPartyByName($playerPartyName);
 
-            echo json_encode($result, JSON_PRETTY_PRINT);
+            var_dump($result);
             return $result;
         }
 
