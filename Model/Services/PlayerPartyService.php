@@ -1,6 +1,7 @@
 <?php
     namespace Model\Services;
 
+    use Model\Objects\PlayerParty;
     use Model\Repository\PlayerPartyRepository;
     use Model\Repository\CharacterRepository;
     use Model\Repository\PlayerPartyMembersRepository;
@@ -42,10 +43,22 @@
             $partyRes = $repo->getPartyByName($partyName);
 
             if($partyRes){
-                $party = [
+                $partyInfo = [
                     'playerPartyName' => $partyRes['Name'],
-                    'playerPartyId' => $partyRes['PlayerPartyId']
+                    'playerPartyId' => (int)$partyRes['PlayerPartyId']
                 ];
+
+                $party = new PlayerParty($partyName, $partyInfo['playerPartyId']);
+
+                $characterService = new CharacterService();
+                $playerPartyMembers = $this->getPlayerPartyMembers($partyInfo['playerPartyId']);
+                foreach($playerPartyMembers as $ppm){
+                    $character = $characterService->getCharacterById($ppm['characterId'])['character'];
+
+                    $party->addMemberToParty($character);
+                    $this->addMemberToPartyByName($character->getCharacterName(), $partyName);
+                }
+
 
                 $result = [
                     'success' => true,
@@ -167,12 +180,10 @@
             return $repo->getPlayerPartyCount();
         }
 
-        public function getPlayerPartyMembers($playerPartyName){
-            $playerParty = $this->getPartyByName($playerPartyName);
-
+        public function getPlayerPartyMembers($playerPartyId){
             $playerPartyMembersRepo = new PlayerPartyMembersRepository();
 
-            $playerPartyMembersIds = $playerPartyMembersRepo->getMembersFromParty($playerParty['party']['playerPartyId']);
+            $playerPartyMembersIds = $playerPartyMembersRepo->getMembersFromParty($playerPartyId);
 
             $playerPartyMembers = [];
             foreach($playerPartyMembersIds as $ppm){

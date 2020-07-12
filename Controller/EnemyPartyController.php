@@ -46,7 +46,7 @@
             $enemyPartyService = new EnemyPartyService();
             $result = $enemyPartyService->getEnemyPartyByName($enemyPartyName);
 
-            echo json_encode($result, JSON_PRETTY_PRINT);
+            var_dump($result);
             return $result;
         }
 

@@ -2,6 +2,7 @@
     namespace Model\Services;
 
     use Model\Repository\CharacterRepository;
+    use Model\Objects\Character;
 
     class CharacterService{
         public function saveCharacter($name, $health, $attackDamage, $mana)
@@ -46,13 +47,15 @@
                 $result['success'] = true;
                 $result['msg'] = 'Character has been found';
 
-                $character = [
+                $characterInfo = [
                     'characterId' => (int)$characterRes['CharacterId'],
                     'characterName' => $characterRes['Name'],
                     'characterHealth' => (int)$characterRes['Health'],
                     'characterAttackDamage' => (int)$characterRes['AttackDamage'],
                     'characterMana' => (int)$characterRes['Mana']
                 ];
+
+                $character = Character::createCharacter($characterInfo);
 
                 $result['character'] = $character;
             }
@@ -73,13 +76,15 @@
                 $result['success'] = true;
                 $result['msg'] = 'Character has been found';
 
-                $character = [
+                $characterInfo = [
                     'characterId' => (int)$characterRes['CharacterId'],
                     'characterName' => $characterRes['Name'],
                     'characterHealth' => (int)$characterRes['Health'],
                     'characterAttackDamage' => (int)$characterRes['AttackDamage'],
                     'characterMana' => (int)$characterRes['Mana']
                 ];
+
+                $character = Character::createCharacter($characterInfo);
 
                 $result['character'] = $character;
             }

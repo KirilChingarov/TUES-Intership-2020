@@ -2,11 +2,13 @@
     namespace Controller;
 
     use Model\Services\CharacterService;
-    use Objects\Character;
-    use Objects\PlayerParty;
-    use Objects\EnemyParty;
+    use Model\Objects\Character;
+    use Model\Objects\PlayerParty;
+    use Model\Objects\EnemyParty;
+    use Model\Services\PlayerPartyService;
+    use Model\Services\EnemyPartyService;
 
-    class TestController{
+class TestController{
         public function createCharacter(){
             $character = [
                 'characterName' => 'Goemon',
@@ -41,20 +43,23 @@
 
         public function createPlayerParty(){
             $playerPartyName = $_POST['playerPartyName'];
-            $playerParty = PlayerParty::createPlayerParty($playerPartyName);
+
+            $playerPartyService = new PlayerPartyService();
+            $playerParty = $playerPartyService->getPartyByName($playerPartyName)['party'];
 
             var_dump($playerParty);
         }
 
         public function addMemberToPlayerParty(){
             $playerPartyName = $_POST['playerPartyName'];
-            $playerParty = PlayerParty::createPlayerParty($playerPartyName);
+            
+            $playerPartyService = new PlayerPartyService();
+            $playerParty = $playerPartyService->getPartyByName($playerPartyName)['party'];
 
             $characterService = new CharacterService();
 
             $characterName = $_POST['characterName'];
             $character = $characterService->getCharacterByName($characterName)['character'];
-            $character = Character::createCharacter($character);
 
             $result = $playerParty->addMemberToParty($character);
 
@@ -64,13 +69,14 @@
 
         public function removeMemberFromPlayerParty(){
             $playerPartyName = $_POST['playerPartyName'];
-            $playerParty = PlayerParty::createPlayerParty($playerPartyName);
+
+            $playerPartyService = new PlayerPartyService();
+            $playerParty = $playerPartyService->getPartyByName($playerPartyName)['party'];
 
             $characterService = new CharacterService();
 
             $characterName = $_POST['characterName'];
             $character = $characterService->getCharacterByName($characterName)['character'];
-            $character = Character::createCharacter($character);
 
             $result = $playerParty->removeMemberFromParty($character);
 
@@ -80,20 +86,23 @@
 
         public function createEnemyParty(){
             $enemyPartyName = $_POST['enemyPartyName'];
-            $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
+            
+            $enemyPartyService = new EnemyPartyService();
+            $enemyParty = $enemyPartyService->getEnemyPartyByName($enemyPartyName)['party'];
 
             var_dump($enemyParty);
         }
 
         public function addMemberToEnemyParty(){
             $enemyPartyName = $_POST['enemyPartyName'];
-            $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
+            
+            $enemyPartyService = new EnemyPartyService();
+            $enemyParty = $enemyPartyService->getEnemyPartyByName($enemyPartyName)['party'];
 
             $characterService = new CharacterService();
 
             $characterName = $_POST['characterName'];
             $character = $characterService->getCharacterByName($characterName)['character'];
-            $character = Character::createCharacter($character);
 
             $result = $enemyParty->addMemberToEnemyParty($character);
 
@@ -103,13 +112,14 @@
 
         public function removeMemberFromEnemyParty(){
             $enemyPartyName = $_POST['enemyPartyName'];
-            $enemyParty = EnemyParty::createEnemyParty($enemyPartyName);
+            
+            $enemyPartyService = new EnemyPartyService();
+            $enemyParty = $enemyPartyService->getEnemyPartyByName($enemyPartyName)['party'];
 
             $characterService = new CharacterService();
 
             $characterName = $_POST['characterName'];
             $character = $characterService->getCharacterByName($characterName)['character'];
-            $character = Character::createCharacter($character);
 
             $result = $enemyParty->removeMemberFromEnemyParty($character);
 
