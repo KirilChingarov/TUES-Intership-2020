@@ -8,8 +8,9 @@
         private $playerPartyName;
         public $members = array();
 
-        public function __construct($playerPartyName){
+        public function __construct($playerPartyName, $playerPartyId){
             $this->playerPartyName = $playerPartyName;
+            $this->playerPartyId = $playerPartyId;
         }
 
         public function getPlayerPartyId(){
