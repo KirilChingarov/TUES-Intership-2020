@@ -1,0 +1,32 @@
+.parties-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.party-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.character{
+    background-color: silver;
+    border: 5px solid gray;
+    margin-bottom: 2px;
+}
+
+.character-name{
+    text-align: center;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.character-stats{
+    margin: auto;
+}
+
+.character-stats p{
+    margin: auto;
+    margin-bottom: 1px;
+}

@@ -46,7 +46,6 @@ use Model\Services\EnemyPartyService;
             session_start();
 
             $combatInfo = $this->combatSetUp();
-            //var_dump($combatInfo);
 
             $_SESSION['combatInfo'] = $combatInfo;
 
