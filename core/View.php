@@ -10,11 +10,6 @@ class View
     {
         $file = dirname(__DIR__) . "/View/$view.php";
 
-        /*if (is_readable($file)){
-            require_once $file;
-        }else {
-            throw new UnexpectedValueException('File not found!');
-        }*/
         require_once $file;
     }
 

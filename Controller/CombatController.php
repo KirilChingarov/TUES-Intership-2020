@@ -1,7 +1,8 @@
 <?php
     namespace Controller;
 
-    use Model\Services\EnemyPartyService;
+use core\View;
+use Model\Services\EnemyPartyService;
     use Model\Services\PlayerPartyService;
 
     class CombatController{
@@ -42,8 +43,14 @@
         }
 
         public function combat(){
+            session_start();
+
             $combatInfo = $this->combatSetUp();
-            var_dump($combatInfo);
+            //var_dump($combatInfo);
+
+            $_SESSION['combatInfo'] = $combatInfo;
+
+            View::render('combatInfo');
         }
     }
 ?>

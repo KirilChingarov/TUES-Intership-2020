@@ -21,7 +21,7 @@
             $service = new IndexService();
             $service->home();*/
 
-            View::render('combatInfo');
+            View::render('combatStart');
         }
     }
 ?>
