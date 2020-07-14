@@ -7,6 +7,8 @@
     use Model\Objects\EnemyParty;
 
     class EnemyPartyService{
+        const MAX_PARTY_MEMBERS_COUNT = 4;
+
         public function saveNewEnemyParty($partyName){
             $result = [
                 'success' => false,
@@ -88,7 +90,7 @@
             $partyId = $party['EnemyPartyId'];
 
             $membersCount = (int)$partyMembersRepo->getMembersCount($partyId)['membersCount'];
-            if($membersCount >= MAX_PARTY_MEMBERS_COUNT){
+            if($membersCount >= self::MAX_PARTY_MEMBERS_COUNT){
                 $result['msg'] = 'Enemy party ' . $partyName . ' is full';
                 return $result;
             }

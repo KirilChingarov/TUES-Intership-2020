@@ -35,6 +35,9 @@
                         else{
                             $cssClass = 'character';
                         }
+                        if($ppm->isCharacterDead()){
+                            $cssClass = 'character-dead';
+                        }
                         echo '<div class="' . $cssClass . '">';
                         echo '<h4 class="character-name">' . $ppm->getCharacterName() . '</h4>';
 
