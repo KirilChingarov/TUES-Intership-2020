@@ -16,6 +16,12 @@
     margin-bottom: 2px;
 }
 
+.character-turn{
+    background-color: silver;
+    border: 5px solid greenyellow;
+    margin-bottom: 2px;
+}
+
 .character-name{
     text-align: center;
     margin: auto;

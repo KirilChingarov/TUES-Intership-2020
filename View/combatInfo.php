@@ -1,9 +1,18 @@
 <?php
-    $combatInfo = $_SESSION['combatInfo'];
+    use Model\Objects\CombatInfo;
+    use Model\Objects\EnemyParty;
+    use Model\Objects\PlayerParty;
 
-    $playerParty = $combatInfo['playerParty'];
-    $enemyParty = $combatInfo['enemyParty'];
+    $combatInfo = json_decode($_SESSION['combatInfo'], true);
+    //print_r($combatInfo);
+    
+    $playerParty = PlayerParty::jsonCreatePlayerParty($combatInfo['playerParty']);
+    $enemyParty = EnemyParty::jsonCreateEnemyParty($combatInfo['enemyParty']);
     $turns = $combatInfo['turns'];
+    $currentTurn = $combatInfo['currentTurn'];
+
+    $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
+    $combatInfo = json_encode($combatInfo);
 ?>
 <html>
     <head>
@@ -18,9 +27,17 @@
                     echo '<h3>Name: ' . $playerParty->getPlayerPartyName() . '</h3>';
                     echo '<p>Members:</p>';
                     $playerPartyMembers = $playerParty->members;
+                    $ppmNum = 0;
                     foreach($playerPartyMembers as $ppm){
-                        echo '<div class="character">';
-                        echo '<h4 class="character-name">' . $ppm->getCharacterName() . '</h2>';
+                        $cssClass = '';
+                        if($turns[$currentTurn][0] === 'p' && $turns[$currentTurn][1] === $ppmNum){
+                            $cssClass = 'character-turn';
+                        }
+                        else{
+                            $cssClass = 'character';
+                        }
+                        echo '<div class="' . $cssClass . '">';
+                        echo '<h4 class="character-name">' . $ppm->getCharacterName() . '</h4>';
 
                         echo '<div class="character-stats">';
                         echo '<p>Health: ' . $ppm->getCharacterHealth() . '</p>';
@@ -28,6 +45,7 @@
                         echo '</div>';
 
                         echo '</div>';
+                        $ppmNum++;
                     }
                 ?>
             </div>
@@ -39,6 +57,7 @@
                     echo '<h3>Name: ' . $enemyParty->getEnemyPartyName() . '</h3>';
                     echo '<p>Members:</p>';
                     $enemyPartyMembers = $enemyParty->members;
+                    $epmNum = 0;
                     foreach($enemyPartyMembers as $epm){
                         echo '<div class="character">';
                         echo '<h4 class="character-name">' . $epm->getCharacterName() . '</h2>';
@@ -48,7 +67,18 @@
                         echo '<p>Mana: ' . $epm->getCharacterMana() . '</p>';
                         echo '</div>';
 
+                        //add attack button
+                        ?>
+                            <form action="index.php?target=combat&action=combatBattle" method="POST">
+                                <input type="hidden" name="targetId" value="<?= $epmNum?>">
+                                <input type="hidden" name="attackerId" value="<?= $turns[$currentTurn][1]?>">
+                                <textarea maxlength="1500" name="combatInfo" style="display: none;"><?= $combatInfo ?></textarea>
+                                <input type="submit" value="Attack">
+                            </form>
+                        <?php
+
                         echo '</div>';
+                        $epmNum++;
                     }
                 ?>
             </div>
