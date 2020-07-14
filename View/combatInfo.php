@@ -4,7 +4,6 @@
     use Model\Objects\PlayerParty;
 
     $combatInfo = json_decode($_SESSION['combatInfo'], true);
-    //print_r($combatInfo);
     
     $playerParty = PlayerParty::jsonCreatePlayerParty($combatInfo['playerParty']);
     $enemyParty = EnemyParty::jsonCreateEnemyParty($combatInfo['enemyParty']);
@@ -42,6 +41,7 @@
                         echo '<div class="character-stats">';
                         echo '<p>Health: ' . $ppm->getCharacterHealth() . '</p>';
                         echo '<p>Mana: ' . $ppm->getCharacterMana() . '</p>';
+                        echo '<p>AttackDamage: ' . $ppm->getCharacterAttackDamage() . '</p>';
                         echo '</div>';
 
                         echo '</div>';
@@ -59,15 +59,25 @@
                     $enemyPartyMembers = $enemyParty->members;
                     $epmNum = 0;
                     foreach($enemyPartyMembers as $epm){
-                        echo '<div class="character">';
+                        $cssClass = '';
+                        if($turns[$currentTurn+1][1] === $epmNum){
+                            $cssClass = 'character-next-turn';
+                        }
+                        else{
+                            $cssClass = 'character';
+                        }
+                        if($epm->isCharacterDead()){
+                            $cssClass = 'character-dead';
+                        }
+                        echo '<div class="' . $cssClass . '">';
                         echo '<h4 class="character-name">' . $epm->getCharacterName() . '</h2>';
 
                         echo '<div class="character-stats">';
                         echo '<p>Health: ' . $epm->getCharacterHealth() . '</p>';
                         echo '<p>Mana: ' . $epm->getCharacterMana() . '</p>';
+                        echo '<p>AttackDamage: ' . $epm->getCharacterAttackDamage() . '</p>';
                         echo '</div>';
 
-                        //add attack button
                         ?>
                             <form action="index.php?target=combat&action=combatBattle" method="POST">
                                 <input type="hidden" name="targetId" value="<?= $epmNum?>">

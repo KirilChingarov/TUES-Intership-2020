@@ -16,9 +16,19 @@
     margin-bottom: 2px;
 }
 
+.character-dead{
+    display: none;
+}
+
 .character-turn{
     background-color: silver;
     border: 5px solid greenyellow;
+    margin-bottom: 2px;
+}
+
+.character-next-turn{
+    background-color: silver;
+    border: 5px solid yellow;
     margin-bottom: 2px;
 }
 

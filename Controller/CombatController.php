@@ -67,18 +67,22 @@ class CombatController{
             $attackerId = (int)$_POST['attackerId'];
             $combatInfo = json_decode($_POST['combatInfo'], true);
 
-            //print_r($combatInfo);
-
             $playerParty = PlayerParty::jsonCreatePlayerParty($combatInfo['playerParty']);
             $enemyParty = EnemyParty::jsonCreateEnemyParty($combatInfo['enemyParty']);
             $turns = $combatInfo['turns'];
             $currentTurn = $combatInfo['currentTurn'];
 
-            //var_dump($playerParty);
-
+            // player attack
             $characterDamage = $playerParty->members[$attackerId]->getCharacterAttackDamage();
             $enemyParty->members[$targetId]->takeDamage($characterDamage);
-            //$currentTurn += 2;
+            $currentTurn++;
+
+            // enemy attack
+            $enemyDamage = $enemyParty->members[$turns[$currentTurn][1]]->getCharacterAttackDamage();
+            $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
+
+            $currentTurn++;
+            if($currentTurn > 7) $currentTurn = 0;
 
             $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
             
