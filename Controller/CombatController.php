@@ -22,14 +22,7 @@ class CombatController{
             if($playerParty['success']) $playerParty = $playerParty['party'];
             if($enemyParty['success']) $enemyParty = $enemyParty['party'];
 
-            /*$combatInfo = [
-                'playerParty' => $playerParty,
-                'enemyParty' => $enemyParty,
-                'turns' => $this->generateTurns()
-            ];*/
             $combatInfo = new CombatInfo($playerParty, $enemyParty, $this->generateTurns(), 0);
-            
-            //echo json_encode($combatInfo);
 
             return $combatInfo;
         }
@@ -75,7 +68,6 @@ class CombatController{
             // player attack
             $characterDamage = $playerParty->members[$attackerId]->getCharacterAttackDamage();
             $enemyParty->members[$targetId]->takeDamage($characterDamage);
-            //$currentTurn++;
 
             // check if enemy party is dead
             $enemyDeadCharacters = 0;
@@ -85,28 +77,23 @@ class CombatController{
             if($enemyDeadCharacters >= 4){
                 View::render('combatWin');
                 session_write_close();
-                
+
                 return;
             }
 
             // enemy attack
-            /*$enemyDamage = $enemyParty->members[$turns[$currentTurn][1]]->getCharacterAttackDamage();
-            $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
-            $currentTurn++;*/
             $enemyTurn = $turns[$currentTurn][1];
             if(!$enemyParty->members[$enemyTurn]->isCharacterDead()){
                 $enemyDamage = $enemyParty->members[$enemyTurn]->getCharacterAttackDamage();
                 $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
-                //$currentTurn++;
             }
 
-            do{
+            while(TRUE){
                 if($currentTurn >= 6) $currentTurn = 0;
                 else $currentTurn += 2;
                 $character = $playerParty->members[$turns[$currentTurn][1]];
-            }while($character->isCharacterDead());
-
-            //if($currentTurn > 7) $currentTurn = 0;
+                if($character->isCharacterDead()) break;
+            };
 
             $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
             

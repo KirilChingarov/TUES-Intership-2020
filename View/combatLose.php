@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title>You won!!!</title>
+        <title>You lost!</title>
     </head>
     <body>
-        <h1>CONGRATULATIONS YOU WIN!!!</h1>
+        <h1>GAME OVER!</h1>
         <br>
         <br>
         <br>
