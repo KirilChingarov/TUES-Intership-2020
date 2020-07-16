@@ -8,7 +8,7 @@
         private $playerPartyId;
         private $playerPartyName;
         public $members = array();
-        const MAX_PARTY_MEMBERS_COUNT = 4;
+        public const MAX_PARTY_MEMBERS_COUNT = 4;
 
         public function __construct($playerPartyName, $playerPartyId){
             $this->playerPartyName = $playerPartyName;

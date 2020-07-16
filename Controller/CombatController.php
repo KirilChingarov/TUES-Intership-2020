@@ -8,7 +8,9 @@
     use Model\Objects\EnemyParty;
     use Model\Objects\PlayerParty;
 
-class CombatController{
+    define('MAX_PARTY_MEMBERS_COUNT', 4);
+
+    class CombatController{
         public function combatSetUp(){
             $playerPartyService = new PlayerPartyService();
             $enemyPartyService = new EnemyPartyService();
@@ -70,11 +72,17 @@ class CombatController{
             $enemyParty->members[$targetId]->takeDamage($characterDamage);
 
             // check if enemy party is dead
-            $enemyDeadCharacters = 0;
+            /*$enemyDeadCharacters = 0;
             for($i = 0;$i < 4;$i++){
                 if($enemyParty->members[$i]->isCharacterDead()) $enemyDeadCharacters++;
             }
             if($enemyDeadCharacters >= 4){
+                View::render('combatWin');
+                session_write_close();
+
+                return;
+            }*/
+            if($this->checkParty($enemyParty)){
                 View::render('combatWin');
                 session_write_close();
 
@@ -88,11 +96,25 @@ class CombatController{
                 $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
             }
 
+            if($this->checkParty($playerParty)){
+                View::render('combatLose');
+                session_write_close();
+
+                return;
+            }
+
             while(TRUE){
                 if($currentTurn >= 6) $currentTurn = 0;
                 else $currentTurn += 2;
                 $character = $playerParty->members[$turns[$currentTurn][1]];
-                if($character->isCharacterDead()) break;
+                if(!$character->isCharacterDead()) break;
+                else{
+                    $enemyTurn = $turns[$currentTurn][1];
+                    if(!$enemyParty->members[$enemyTurn]->isCharacterDead()){
+                        $enemyDamage = $enemyParty->members[$enemyTurn]->getCharacterAttackDamage();
+                        $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
+                    }
+                }
             };
 
             $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
@@ -100,8 +122,19 @@ class CombatController{
             $_SESSION['combatInfo'] = json_encode($combatInfo);
 
             View::render('combatInfo');
-
             session_write_close();
+
+            return;
+        }
+
+        private function checkParty($party){
+            $deadCharacters = 0;
+            for($i = 0;$i < MAX_PARTY_MEMBERS_COUNT;$i++){
+                if($party->members[$i]->isCharacterDead()) $deadCharacters++;
+            }
+
+            if($deadCharacters >= MAX_PARTY_MEMBERS_COUNT) return true;
+            return false;
         }
     }
 ?>
