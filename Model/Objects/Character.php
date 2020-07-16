@@ -1,9 +1,10 @@
 <?php
     namespace Model\Objects;
 
+    use JsonSerializable;
     use Model\Services\CharacterService;
 
-    class Character{
+    class Character implements JsonSerializable{
         private $characterId;
         private $characterName;
         private $characterHealth;
@@ -16,6 +17,31 @@
             $this->characterHealth = $characterHealth;
             $this->characterAttackDamage = $characterAttackDamage;
             $this->characterMana = $characterMana;
+            if($this->characterHealth > 0) $this->isDead = false;
+            else $this->isDead = true;
+        }
+
+        public function jsonSerialize(){
+            $character['characterId'] = $this->characterId;
+            $character['characterName'] = $this->characterName;
+            $character['characterHealth'] = $this->characterHealth;
+            $character['characterAttackDamage'] = $this->characterAttackDamage;
+            $character['characterMana'] = $this->characterMana;
+            $character['characterIsDead'] = $this->isDead;
+
+            return $character;
+        }
+
+        public static function jsonCreateCharacter($json_decoded){
+            $character = new Character(
+                $json_decoded['characterName'],
+                $json_decoded['characterHealth'],
+                $json_decoded['characterAttackDamage'],
+                $json_decoded['characterMana']
+            );
+            $character->setCharacterId($json_decoded['characterId']);
+
+            return $character;
         }
 
         public function getCharacterName(){

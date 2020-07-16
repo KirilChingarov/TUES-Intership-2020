@@ -1,15 +1,41 @@
 <?php
     namespace Model\Objects;
 
+    use JsonSerializable;
     use Model\Objects\Character;
 
-    class EnemyParty{
+    class EnemyParty implements JsonSerializable{
         private $enemyPartyId;
         private $enemyPartyName;
         public $members = array();
+        public const MAX_PARTY_MEMBERS_COUNT = 4;
 
-        public function __construct($enemyPartyName){
+        public function __construct($enemyPartyName, $enemyPartyId){
             $this->enemyPartyName = $enemyPartyName;
+            $this->enemyPartyId = $enemyPartyId;
+        }
+
+        public function jsonSerialize(){
+            $enemyParty['enemyPartyId'] = $this->enemyPartyId;
+            $enemyParty['enemyPartyName'] = $this->enemyPartyName;
+            $enemyParty['members'] = $this->members;
+
+            return $enemyParty;
+        }
+
+        public static function jsonCreateEnemyParty($json_decoded){
+            $enemyPartyId = $json_decoded['enemyPartyId'];
+            $enemyPartyName = $json_decoded['enemyPartyName'];
+
+            $enemyParty = new EnemyParty($enemyPartyName, $enemyPartyId);
+            
+            foreach($json_decoded['members'] as $member){
+                $character = Character::jsonCreateCharacter($member);
+
+                $enemyParty->addMemberToEnemyParty($character);
+            }
+
+            return $enemyParty;
         }
 
         public function getEnemyPartyId(){
@@ -39,12 +65,8 @@
                 'success' => false
             ];
             
-            if(in_array($character, $this->members, TRUE)){
-                $result['msg'] = 'Character already in party';
-                return $result;
-            }
-            if(count($this->members) >= MAX_PARTY_MEMBERS_COUNT){
-                $result['msg'] = $this->playerPartyName . ' is full';
+            if(count($this->members) >= self::MAX_PARTY_MEMBERS_COUNT){
+                $result['msg'] = $this->enemyPartyName . ' is full';
                 return $result;
             }
 

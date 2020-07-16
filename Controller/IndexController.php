@@ -2,6 +2,7 @@
     namespace Controller;
 
     use Model\Services\IndexService;
+    use core\View;
 
     class IndexController{
         public function error($errorCode){
@@ -16,9 +17,11 @@
         }
 
         public function home(){
-            echo var_dump('IndexController');
+            /*echo var_dump('IndexController');
             $service = new IndexService();
-            $service->home();
+            $service->home();*/
+
+            View::render('combatStart');
         }
     }
 ?>
