@@ -72,16 +72,6 @@
             $enemyParty->members[$targetId]->takeDamage($characterDamage);
 
             // check if enemy party is dead
-            /*$enemyDeadCharacters = 0;
-            for($i = 0;$i < 4;$i++){
-                if($enemyParty->members[$i]->isCharacterDead()) $enemyDeadCharacters++;
-            }
-            if($enemyDeadCharacters >= 4){
-                View::render('combatWin');
-                session_write_close();
-
-                return;
-            }*/
             if($this->checkParty($enemyParty)){
                 View::render('combatWin');
                 session_write_close();
@@ -96,6 +86,7 @@
                 $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
             }
 
+            // check if player party is dead
             if($this->checkParty($playerParty)){
                 View::render('combatLose');
                 session_write_close();
