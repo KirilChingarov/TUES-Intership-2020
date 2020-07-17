@@ -6,9 +6,11 @@
     use Model\Repository\CharacterRepository;
     use Model\Repository\PlayerPartyMembersRepository;
 
-    define('MAX_PARTY_MEMBERS_COUNT', 4);
+    //define('MAX_PARTY_MEMBERS_COUNT', 4);
 
     class PlayerPartyService{
+        const MAX_PARTY_MEMBERS_COUNT = 4;
+        
         public function saveNewParty($partyName){
             $result = [
                 'success' => false,

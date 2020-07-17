@@ -1,0 +1,29 @@
+body{
+    background-color: #2D3A3A;
+    color: #FCFFFC;
+    font-family: Verdana;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1{
+    text-align: center;
+    font-size: 50px;
+}
+
+a{
+    text-decoration: none;
+    color: #FCFFFC;
+    background-color: #248232;
+    padding: 10px;
+    text-align: center;
+    margin: auto;
+    margin-top: 10em;
+}
+
+a:hover{
+    background-color: #2BA84A;
+    color: #040F0F;
+    transition: 0.5s;
+}

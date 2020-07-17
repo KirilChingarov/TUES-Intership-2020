@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>You won!!!</title>
+        <link rel="stylesheet" href="View/css/combatEnd.css" type="text/css">
     </head>
     <body>
         <h1>CONGRATULATIONS YOU WIN!!!</h1>

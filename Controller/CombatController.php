@@ -106,6 +106,12 @@
                         $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
                     }
                 }
+                if($this->checkParty($playerParty)){
+                    View::render('combatLose');
+                    session_write_close();
+    
+                    return;
+                }
             };
 
             $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);

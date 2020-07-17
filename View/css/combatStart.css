@@ -1,0 +1,40 @@
+body{
+    background-color: #2D3A3A;
+    color: #FCFFFC;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    margin-right: 30%;
+    margin-left: 30%;
+    font-family: Verdana;
+}
+
+form label{
+    margin-bottom: 10px;
+}
+
+input{
+    margin: auto;
+    font-family: Verdana;
+    color: #040F0F;
+    font-style: bold;
+}
+
+button{
+    margin: auto;
+    background-color: #248232;
+    border: none;
+    padding: 10px;
+    color: #FCFFFC;
+    font-family: Verdana;
+}
+
+button:hover{
+    background-color: #2BA84A;
+    color: #040F0F;
+    transition: 0.5s;
+}

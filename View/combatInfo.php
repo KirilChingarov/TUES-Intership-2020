@@ -27,6 +27,7 @@
                     echo '<p>Members:</p>';
                     $playerPartyMembers = $playerParty->members;
                     $ppmNum = 0;
+                    echo '<div class="members">';
                     foreach($playerPartyMembers as $ppm){
                         $cssClass = '';
                         if($turns[$currentTurn][0] === 'p' && $turns[$currentTurn][1] === $ppmNum){
@@ -50,6 +51,7 @@
                         echo '</div>';
                         $ppmNum++;
                     }
+                    echo '</div>';
                 ?>
             </div>
             
@@ -61,13 +63,14 @@
                     echo '<p>Members:</p>';
                     $enemyPartyMembers = $enemyParty->members;
                     $epmNum = 0;
+                    echo '<div class="members">';
                     foreach($enemyPartyMembers as $epm){
                         $cssClass = '';
                         if($turns[$currentTurn+1][1] === $epmNum){
-                            $cssClass = 'character-next-turn';
+                            $cssClass = 'enemy character-next-turn';
                         }
                         else{
-                            $cssClass = 'character';
+                            $cssClass = 'character enemy';
                         }
                         if($epm->isCharacterDead()){
                             $cssClass = 'character-dead';
@@ -86,13 +89,14 @@
                                 <input type="hidden" name="targetId" value="<?= $epmNum?>">
                                 <input type="hidden" name="attackerId" value="<?= $turns[$currentTurn][1]?>">
                                 <textarea maxlength="1500" name="combatInfo" style="display: none;"><?= $combatInfo ?></textarea>
-                                <input type="submit" value="Attack">
+                                <input class="attack-button" type="submit" value="Attack">
                             </form>
                         <?php
 
                         echo '</div>';
                         $epmNum++;
                     }
+                    echo '</div>';
                 ?>
             </div>
         </div>

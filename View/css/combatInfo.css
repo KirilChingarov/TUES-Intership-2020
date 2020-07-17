@@ -1,19 +1,44 @@
+body{
+    background-color: #2D3A3A;
+    color: #FCFFFC;
+    font-family: Verdana;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+h2, h3{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .parties-container{
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-around;
 }
 
 .party-container{
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.members{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .character{
-    background-color: silver;
-    border: 5px solid gray;
-    margin-bottom: 2px;
+    background-color: #248232;
+    border: 5px solid #040F0F;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.enemy{
+    background-color: #BA1A14;
 }
 
 .character-dead{
@@ -21,15 +46,19 @@
 }
 
 .character-turn{
-    background-color: silver;
+    background-color: #248232;
     border: 5px solid greenyellow;
-    margin-bottom: 2px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .character-next-turn{
-    background-color: silver;
+    background-color: #BA1A14;
     border: 5px solid yellow;
-    margin-bottom: 2px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .character-name{
@@ -44,5 +73,18 @@
 
 .character-stats p{
     margin: auto;
+    margin-bottom: 3px;
+}
+
+.attack-button{
+    border: none;
+    margin-top: 5px;
     margin-bottom: 1px;
+    background-color: #040F0F;
+    color: #FCFFFC;
+    padding: 5px;
+}
+
+form{
+    margin: 0;
 }
