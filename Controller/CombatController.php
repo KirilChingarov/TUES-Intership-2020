@@ -178,6 +178,7 @@
                     }
                 }
                 if($this->checkParty($playerParty)){
+                    echo "combatLose$";
                     View::render('combatLose');
                     session_write_close();
     

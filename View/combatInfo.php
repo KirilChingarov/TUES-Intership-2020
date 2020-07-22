@@ -41,7 +41,7 @@
             }
 
             function parseResponse(responseText){
-                console.log(responseText);
+                //console.log(responseText);
 
                 if(!checkEndBattle(responseText)){
                     combatInfo = jQuery.parseJSON(responseText);
