@@ -23,12 +23,13 @@
             var targetId;
             var currentTurn = <?= $currentTurn?>;
             var combatInfo = <?= $combatInfo?>;
-            var currentTurn;
+            var attackerId = combatInfo.turns[currentTurn][1];
+            var turns = combatInfo.turns;
 
             function attackEnemy(){
                 var data = new FormData();
                 data.append('targetId', targetId);
-                data.append('attackerId', '<?= $currentTurn?>');
+                data.append('attackerId', attackerId);
                 data.append('combatInfo', JSON.stringify(combatInfo));
 
                 var xhttp = new XMLHttpRequest();
@@ -40,26 +41,55 @@
             }
 
             function parseResponse(responseText){
-                console.log(combatInfo);
+                //console.log(combatInfo);
                 combatInfo = jQuery.parseJSON(responseText);
+                turns = combatInfo.turns;
+                currentTurn = combatInfo.currentTurn;
+                attackerId = combatInfo.turns[currentTurn][1];
 
                 updatePlayerPartyMembers(combatInfo.playerParty.members);
                 updateEnemyPartyMembers(combatInfo.enemyParty.members);
             };
 
+            
+
             function updatePlayerPartyMembers(playerPartyMembers){
-                console.log(playerPartyMembers);
+                //console.log(playerPartyMembers);
+
                 for(var i = 0;i < 4;i++){
-                    var playerStats = "#player-" + i + ">";
-                    $(playerStats + ".health").text("Health: " + playerPartyMembers[i].characterHealth);
+                    var playerStats = "#player-" + i;
+                    if(playerPartyMembers[i].characterIsDead){
+                        $(playerStats).parent().attr('class', 'character-dead');
+                    }
+                    else{
+                        if(turns[currentTurn][1] == i){
+                            $(playerStats).parent().attr('class', 'character-turn');
+                        }
+                        else{
+                            $(playerStats).parent().attr('class', 'character');
+                        }
+                        $(playerStats + ">.health").text("Health: " + playerPartyMembers[i].characterHealth);
+                    }
                 }
             }
 
             function updateEnemyPartyMembers(enemyPartyMembers){
-                console.log(enemyPartyMembers);
+                //console.log(enemyPartyMembers);
+                
                 for(var i = 0;i < 4;i++){
-                    var enemyStats = "#enemy-" + i + ">";
-                    $(enemyStats + ".health").text("Health: " + enemyPartyMembers[i].characterHealth);
+                    var enemyStats = "#enemy-" + i;
+                    if(enemyPartyMembers[i].characterIsDead){
+                        $(enemyStats).parent().attr('class', 'character-dead');
+                    }
+                    else{
+                        if(turns[currentTurn + 1][1] == i){
+                            $(enemyStats).parent().attr('class', 'enemy character-next-turn');
+                        }
+                        else{
+                            $(enemyStats).parent().attr('class', 'enemy character');
+                        }
+                        $(enemyStats + ">.health").text("Health: " + enemyPartyMembers[i].characterHealth);
+                    }
                 }
             }
         </script>
