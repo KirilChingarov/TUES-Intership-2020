@@ -12,11 +12,38 @@
 
     $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
     $combatInfo = json_encode($combatInfo);
+
 ?>
 <html>
     <head>
         <title>Combat Info</title>
         <link rel="stylesheet" href="View/css/combatInfo.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            var targetId;
+            var currentTurn = <?= $currentTurn?>;
+            var combatInfo = <?= $combatInfo?>;
+
+            function attackEnemy(){
+                var data = new FormData();
+                data.append('targetId', targetId);
+                data.append('attackerId', '<?= $currentTurn?>');
+                data.append('combatInfo', '<?= $combatInfo?>');
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function(){
+                    //alert(this.status);
+                    if(this.readyState == 4 && this.status == 200) parseResponse(this.responseText);
+                }
+                xhttp.open("POST", "index.php?target=combat&action=battle", true);
+                xhttp.send(data);
+            }
+
+            function parseResponse(responseText){
+                $("#p-combat-info").text(responseText);
+                var responseObj = jQuery.parseJSON(responseText);
+            };
+        </script>
     </head>
     <body>
         <div class="parties-container">
@@ -85,12 +112,13 @@
                         echo '</div>';
 
                         ?>
-                            <form action="index.php?target=combat&action=combatBattle" method="POST">
-                                <input type="hidden" name="targetId" value="<?= $epmNum?>">
-                                <input type="hidden" name="attackerId" value="<?= $turns[$currentTurn][1]?>">
-                                <textarea maxlength="1500" name="combatInfo" style="display: none;"><?= $combatInfo ?></textarea>
+                            <!-- <form action="index.php?target=combat&action=combatBattle" method="POST">
+                                <input type="hidden" name="targetId" value="<//?= $epmNum?>">
+                                <input type="hidden" name="attackerId" value="<//?= $turns[$currentTurn][1]?>">
+                                <textarea maxlength="1500" name="combatInfo" style="display: none;"><//?= $combatInfo ?></textarea>
                                 <input class="attack-button" type="submit" value="Attack">
-                            </form>
+                            </form> -->
+                            <button id="<?= $epmNum?>" class="attack-button" onclick="targetId = <?= $epmNum?>; attackEnemy();">Attack</button>
                         <?php
 
                         echo '</div>';
@@ -100,5 +128,6 @@
                 ?>
             </div>
         </div>
+        <p id="p-combat-info"></p>
     </body>
 </html>
