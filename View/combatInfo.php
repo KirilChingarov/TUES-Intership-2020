@@ -23,16 +23,16 @@
             var targetId;
             var currentTurn = <?= $currentTurn?>;
             var combatInfo = <?= $combatInfo?>;
+            var currentTurn;
 
             function attackEnemy(){
                 var data = new FormData();
                 data.append('targetId', targetId);
                 data.append('attackerId', '<?= $currentTurn?>');
-                data.append('combatInfo', '<?= $combatInfo?>');
+                data.append('combatInfo', JSON.stringify(combatInfo));
 
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
-                    //alert(this.status);
                     if(this.readyState == 4 && this.status == 200) parseResponse(this.responseText);
                 }
                 xhttp.open("POST", "index.php?target=combat&action=battle", true);
@@ -40,9 +40,28 @@
             }
 
             function parseResponse(responseText){
-                $("#p-combat-info").text(responseText);
-                var responseObj = jQuery.parseJSON(responseText);
+                console.log(combatInfo);
+                combatInfo = jQuery.parseJSON(responseText);
+
+                updatePlayerPartyMembers(combatInfo.playerParty.members);
+                updateEnemyPartyMembers(combatInfo.enemyParty.members);
             };
+
+            function updatePlayerPartyMembers(playerPartyMembers){
+                console.log(playerPartyMembers);
+                for(var i = 0;i < 4;i++){
+                    var playerStats = "#player-" + i + ">";
+                    $(playerStats + ".health").text("Health: " + playerPartyMembers[i].characterHealth);
+                }
+            }
+
+            function updateEnemyPartyMembers(enemyPartyMembers){
+                console.log(enemyPartyMembers);
+                for(var i = 0;i < 4;i++){
+                    var enemyStats = "#enemy-" + i + ">";
+                    $(enemyStats + ".health").text("Health: " + enemyPartyMembers[i].characterHealth);
+                }
+            }
         </script>
     </head>
     <body>
@@ -69,10 +88,10 @@
                         echo '<div class="' . $cssClass . '">';
                         echo '<h4 class="character-name">' . $ppm->getCharacterName() . '</h4>';
 
-                        echo '<div class="character-stats">';
-                        echo '<p>Health: ' . $ppm->getCharacterHealth() . '</p>';
-                        echo '<p>Mana: ' . $ppm->getCharacterMana() . '</p>';
-                        echo '<p>AttackDamage: ' . $ppm->getCharacterAttackDamage() . '</p>';
+                        echo '<div id="player-' . $ppmNum . '" class="character-stats">';
+                        echo '<p class="health">Health: ' . $ppm->getCharacterHealth() . '</p>';
+                        echo '<p class="mana">Mana: ' . $ppm->getCharacterMana() . '</p>';
+                        echo '<p class="attack-damage">AttackDamage: ' . $ppm->getCharacterAttackDamage() . '</p>';
                         echo '</div>';
 
                         echo '</div>';
@@ -105,10 +124,10 @@
                         echo '<div class="' . $cssClass . '">';
                         echo '<h4 class="character-name">' . $epm->getCharacterName() . '</h2>';
 
-                        echo '<div class="character-stats">';
-                        echo '<p>Health: ' . $epm->getCharacterHealth() . '</p>';
-                        echo '<p>Mana: ' . $epm->getCharacterMana() . '</p>';
-                        echo '<p>AttackDamage: ' . $epm->getCharacterAttackDamage() . '</p>';
+                        echo '<div id="enemy-' . $epmNum . '" class="character-stats">';
+                        echo '<p class="health">Health: ' . $epm->getCharacterHealth() . '</p>';
+                        echo '<p class="mana">Mana: ' . $epm->getCharacterMana() . '</p>';
+                        echo '<p class="attack-damage">AttackDamage: ' . $epm->getCharacterAttackDamage() . '</p>';
                         echo '</div>';
 
                         ?>
