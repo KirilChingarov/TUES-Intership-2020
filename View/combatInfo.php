@@ -41,17 +41,32 @@
             }
 
             function parseResponse(responseText){
-                //console.log(combatInfo);
-                combatInfo = jQuery.parseJSON(responseText);
-                turns = combatInfo.turns;
-                currentTurn = combatInfo.currentTurn;
-                attackerId = combatInfo.turns[currentTurn][1];
+                console.log(responseText);
 
-                updatePlayerPartyMembers(combatInfo.playerParty.members);
-                updateEnemyPartyMembers(combatInfo.enemyParty.members);
+                if(!checkEndBattle(responseText)){
+                    combatInfo = jQuery.parseJSON(responseText);
+                    turns = combatInfo.turns;
+                    currentTurn = combatInfo.currentTurn;
+                    attackerId = combatInfo.turns[currentTurn][1];
+
+                    updatePlayerPartyMembers(combatInfo.playerParty.members);
+                    updateEnemyPartyMembers(combatInfo.enemyParty.members);
+                }
             };
 
-            
+            function checkEndBattle(responseText){
+                //console.log(responseText.split("$")[0]);
+                //console.log(responseText.split("$")[1]);
+                var arg = responseText.split("$");
+                var htmlBody = arg[1];
+
+                if(arg[0] == "combatWin" || arg[0] == "combatLose"){
+                    document.write(arg[1]);
+                    return true;
+                }
+
+                return false;
+            }
 
             function updatePlayerPartyMembers(playerPartyMembers){
                 //console.log(playerPartyMembers);

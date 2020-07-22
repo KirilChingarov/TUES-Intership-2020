@@ -142,6 +142,7 @@
 
             // check if enemy party is dead
             if($this->checkParty($enemyParty)){
+                echo "combatWin$";
                 View::render('combatWin');
                 session_write_close();
 
@@ -157,6 +158,7 @@
 
             // check if player party is dead
             if($this->checkParty($playerParty)){
+                echo "combatLose$";
                 View::render('combatLose');
                 session_write_close();
 
