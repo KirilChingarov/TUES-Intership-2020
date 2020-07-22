@@ -190,7 +190,6 @@
             
             $_SESSION['combatInfo'] = json_encode($combatInfo);
 
-            //View::render('combatInfo');
             echo json_encode($combatInfo);
             session_write_close();
 

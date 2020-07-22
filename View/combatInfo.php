@@ -41,7 +41,6 @@
             }
 
             function parseResponse(responseText){
-                //console.log(responseText);
 
                 if(!checkEndBattle(responseText)){
                     combatInfo = jQuery.parseJSON(responseText);
@@ -55,8 +54,6 @@
             };
 
             function checkEndBattle(responseText){
-                //console.log(responseText.split("$")[0]);
-                //console.log(responseText.split("$")[1]);
                 var arg = responseText.split("$");
                 var htmlBody = arg[1];
 
@@ -69,7 +66,6 @@
             }
 
             function updatePlayerPartyMembers(playerPartyMembers){
-                //console.log(playerPartyMembers);
 
                 for(var i = 0;i < 4;i++){
                     var playerStats = "#player-" + i;
@@ -89,7 +85,6 @@
             }
 
             function updateEnemyPartyMembers(enemyPartyMembers){
-                //console.log(enemyPartyMembers);
                 
                 for(var i = 0;i < 4;i++){
                     var enemyStats = "#enemy-" + i;
