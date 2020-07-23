@@ -105,86 +105,81 @@
         </script>
     </head>
     <body>
+        <!-- Player Party ########################################################################################## -->
         <div class="parties-container">
             <div class="party-container">
                 <h2>Player Party</h2>
+                <h3>Name: <?=$playerParty->getPlayerPartyName()?></h3>
+                <p>Members:</p>
                 <?php
-                    echo '<h3>Name: ' . $playerParty->getPlayerPartyName() . '</h3>';
-                    echo '<p>Members:</p>';
                     $playerPartyMembers = $playerParty->members;
                     $ppmNum = 0;
-                    echo '<div class="members">';
-                    foreach($playerPartyMembers as $ppm){
-                        $cssClass = '';
-                        if($turns[$currentTurn][0] === 'p' && $turns[$currentTurn][1] === $ppmNum){
-                            $cssClass = 'character-turn';
-                        }
-                        else{
-                            $cssClass = 'character';
-                        }
-                        if($ppm->isCharacterDead()){
-                            $cssClass = 'character-dead';
-                        }
-                        echo '<div class="' . $cssClass . '">';
-                        echo '<h4 class="character-name">' . $ppm->getCharacterName() . '</h4>';
-
-                        echo '<div id="player-' . $ppmNum . '" class="character-stats">';
-                        echo '<p class="health">Health: ' . $ppm->getCharacterHealth() . '</p>';
-                        echo '<p class="mana">Mana: ' . $ppm->getCharacterMana() . '</p>';
-                        echo '<p class="attack-damage">AttackDamage: ' . $ppm->getCharacterAttackDamage() . '</p>';
-                        echo '</div>';
-
-                        echo '</div>';
-                        $ppmNum++;
-                    }
-                    echo '</div>';
                 ?>
+                <div class="members">
+                    <?php
+                        foreach($playerPartyMembers as $ppm){
+                            $cssClass;
+                            if($turns[$currentTurn][0] === 'p' && $turns[$currentTurn][1] === $ppmNum){
+                                $cssClass = 'character-turn';
+                            }
+                            else{
+                                $cssClass = 'character';
+                            }
+                            if($ppm->isCharacterDead()){
+                                $cssClass = 'character-dead';
+                            }
+                            ?>
+                            <div class="<?= $cssClass?>">
+                                <h4 class="character-name"><?= $ppm->getCharacterName()?></h4>
+                                <div id="player-<?= $ppmNum?>" class="character-stats">
+                                    <p class="health">Health: <?= $ppm->getCharacterHealth()?></p>
+                                    <p class="mana">Mana: <?= $ppm->getCharacterMana()?></p>
+                                    <p class="attack-damage">ATK: <?= $ppm->getCharacterAttackDamage()?></p>
+                                </div>
+                            </div>
+                            <?php
+                            $ppmNum++;
+                        }
+                    ?>
+                </div>
             </div>
-            
-            
+            <!-- Enemy Party ########################################################################################## -->
             <div class="party-container">
                 <h2>Enemy Party</h2>
+                <h3>Name: <?= $enemyParty->getEnemyPartyName()?></h3>
+                <p>Members:</p>
                 <?php
-                    echo '<h3>Name: ' . $enemyParty->getEnemyPartyName() . '</h3>';
-                    echo '<p>Members:</p>';
                     $enemyPartyMembers = $enemyParty->members;
                     $epmNum = 0;
-                    echo '<div class="members">';
-                    foreach($enemyPartyMembers as $epm){
-                        $cssClass = '';
-                        if($turns[$currentTurn+1][1] === $epmNum){
-                            $cssClass = 'enemy character-next-turn';
-                        }
-                        else{
-                            $cssClass = 'character enemy';
-                        }
-                        if($epm->isCharacterDead()){
-                            $cssClass = 'character-dead';
-                        }
-                        echo '<div class="' . $cssClass . '">';
-                        echo '<h4 class="character-name">' . $epm->getCharacterName() . '</h2>';
-
-                        echo '<div id="enemy-' . $epmNum . '" class="character-stats">';
-                        echo '<p class="health">Health: ' . $epm->getCharacterHealth() . '</p>';
-                        echo '<p class="mana">Mana: ' . $epm->getCharacterMana() . '</p>';
-                        echo '<p class="attack-damage">AttackDamage: ' . $epm->getCharacterAttackDamage() . '</p>';
-                        echo '</div>';
-
-                        ?>
-                            <!-- <form action="index.php?target=combat&action=combatBattle" method="POST">
-                                <input type="hidden" name="targetId" value="<//?= $epmNum?>">
-                                <input type="hidden" name="attackerId" value="<//?= $turns[$currentTurn][1]?>">
-                                <textarea maxlength="1500" name="combatInfo" style="display: none;"><//?= $combatInfo ?></textarea>
-                                <input class="attack-button" type="submit" value="Attack">
-                            </form> -->
-                            <button id="<?= $epmNum?>" class="attack-button" onclick="targetId = <?= $epmNum?>; attackEnemy();">Attack</button>
-                        <?php
-
-                        echo '</div>';
-                        $epmNum++;
-                    }
-                    echo '</div>';
                 ?>
+                <div class="members">
+                    <?php
+                        foreach($enemyPartyMembers as $epm){
+                            $cssClass;
+                            if($turns[$currentTurn+1][1] === $epmNum){
+                                $cssClass = 'enemy character-next-turn';
+                            }
+                            else{
+                                $cssClass = 'character enemy';
+                            }
+                            if($epm->isCharacterDead()){
+                                $cssClass = 'character-dead';
+                            }
+                            ?>
+                            <div class="<?= $cssClass?>">
+                                <h4 class="character-name"><?= $epm->getCharacterName()?></h4>
+                                <div id="enemy-<?= $epmNum?>" class="character-stats">
+                                    <p class="health">Health: <?= $epm->getCharacterHealth()?></p>
+                                    <p class="mana">Mana: <?= $epm->getCharacterMana()?></p>
+                                    <p class="attack-damage">ATK: <?= $epm->getCharacterAttackDamage()?></p>
+                                </div>
+                                <button id="<?= $epmNum?>" class="attack-button" onclick="targetId = <?= $epmNum?>; attackEnemy();">Attack</button>
+                            </div>
+                            <?php
+                            $epmNum++;
+                        }
+                    ?>
+                </div>
             </div>
         </div>
         <p id="p-combat-info"></p>
