@@ -7,6 +7,11 @@
     use Model\Objects\CombatInfo;
 
     define('MAX_PARTY_MEMBERS_COUNT', 4);
+    define('LAST_PLAYER_TURN', 6);
+    define('NEXT_PLAYER_TURN', 2);
+    define('CHARACTER_TURN', 1);
+    define('NEW_ROUND', 0);
+    
 
     class CombatController{
         public function combatSetUp(){
@@ -58,8 +63,6 @@
         }
 
         public function battle(){
-            session_start();
-
             $targetId = (int)$_POST['targetId'];
             $attackerId = (int)$_POST['attackerId'];
             $combatInfo = json_decode($_POST['combatInfo'], true);
@@ -75,7 +78,6 @@
 
             // check if enemy party is dead
             if($this->checkParty($enemyParty)){
-                echo "combatWin$";
                 View::render('combatWin');
                 session_write_close();
 
@@ -91,7 +93,6 @@
 
             // check if player party is dead
             if($this->checkParty($playerParty)){
-                echo "combatLose$";
                 View::render('combatLose');
                 session_write_close();
 
@@ -99,27 +100,26 @@
             }
 
             while(TRUE){
-                if($currentTurn >= 6){
-                    $currentTurn = 0;
+                if($currentTurn >= LAST_PLAYER_TURN){
+                    $currentTurn = NEW_ROUND;
                 }
                 else{
-                    $currentTurn += 2;
+                    $currentTurn += NEXT_PLAYER_TURN;
                 }
 
-                $character = $playerParty->members[$turns[$currentTurn][1]];
+                $character = $playerParty->members[$turns[$currentTurn][CHARACTER_TURN]];
                 
                 if(!$character->isCharacterDead()){
                     break;
                 }
                 else{
-                    $enemyTurn = $turns[$currentTurn][1];
+                    $enemyTurn = $turns[$currentTurn][CHARACTER_TURN];
                     if(!$enemyParty->members[$enemyTurn]->isCharacterDead()){
                         $enemyDamage = $enemyParty->members[$enemyTurn]->getCharacterAttackDamage();
                         $playerParty->members[rand(0, 3)]->takeDamage($enemyDamage);
                     }
                 }
                 if($this->checkParty($playerParty)){
-                    echo "combatLose$";
                     View::render('combatLose');
                     session_write_close();
     
@@ -128,13 +128,8 @@
             };
 
             $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
-            
-            $_SESSION['combatInfo'] = json_encode($combatInfo);
 
             echo json_encode($combatInfo);
-            session_write_close();
-
-            return;
         }
 
         private function checkParty($party){

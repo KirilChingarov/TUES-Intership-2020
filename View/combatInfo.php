@@ -54,15 +54,13 @@
             };
 
             function checkEndBattle(responseText){
-                var arg = responseText.split("$");
-                var htmlBody = arg[1];
-
-                if(arg[0] == "combatWin" || arg[0] == "combatLose"){
-                    document.write(arg[1]);
+                try {
+                    jQuery.parseJSON(responseText);
+                    return false;
+                } catch (error) {
+                    document.write(responseText);
                     return true;
                 }
-
-                return false;
             }
 
             function updatePlayerPartyMembers(playerPartyMembers){
@@ -105,8 +103,8 @@
         </script>
     </head>
     <body>
-        <!-- Player Party ########################################################################################## -->
         <div class="parties-container">
+            <!-- Player Party ########################################################################################## -->
             <div class="party-container">
                 <h2>Player Party</h2>
                 <h3>Name: <?=$playerParty->getPlayerPartyName()?></h3>
