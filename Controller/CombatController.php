@@ -192,6 +192,7 @@
             $playerParty = PlayerPartyService::jsonCreatePlayerParty($combatInfo['playerParty']);
             $enemyParty = EnemyPartyService::jsonCreateEnemyParty($combatInfo['enemyParty']);
             $currentTurn = $combatInfo['currentTurn'];
+            $turns = $combatInfo['turns'];
 
             // enemy attack
             if(!$enemyParty->members[$attackerId]->isCharacterDead()){
@@ -200,6 +201,10 @@
             }
             $currentTurn++;
 
+            if($currentTurn >= LAST_ENEMY_TURN){
+                $currentTurn = NEW_ROUND;
+            }
+
             // check if player party is dead
             if($this->checkParty($playerParty)){
                 View::render('combatLose');
@@ -207,7 +212,7 @@
                 return;
             }
 
-            $combatInfo = new CombatInfo($playerParty, $enemyParty, $combatInfo['turns'], $currentTurn);
+            $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
 
             echo json_encode($combatInfo);
         }
