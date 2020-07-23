@@ -1,12 +1,12 @@
 <?php
     use Model\Objects\CombatInfo;
-    use Model\Objects\EnemyParty;
-    use Model\Objects\PlayerParty;
+    use Model\Services\EnemyPartyService;
+    use Model\Services\PlayerPartyService;
 
     $combatInfo = json_decode($_SESSION['combatInfo'], true);
     
-    $playerParty = PlayerParty::jsonCreatePlayerParty($combatInfo['playerParty']);
-    $enemyParty = EnemyParty::jsonCreateEnemyParty($combatInfo['enemyParty']);
+    $playerParty = PlayerPartyService::jsonCreatePlayerParty($combatInfo['playerParty']);
+    $enemyParty = EnemyPartyService::jsonCreateEnemyParty($combatInfo['enemyParty']);
     $turns = $combatInfo['turns'];
     $currentTurn = $combatInfo['currentTurn'];
 

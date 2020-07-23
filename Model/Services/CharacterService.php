@@ -34,6 +34,18 @@
             return $result;
         }
 
+        public static function jsonCreateCharacter($json_decoded){
+            $character = new Character(
+                $json_decoded['characterName'],
+                $json_decoded['characterHealth'],
+                $json_decoded['characterAttackDamage'],
+                $json_decoded['characterMana']
+            );
+            $character->setCharacterId($json_decoded['characterId']);
+
+            return $character;
+        }
+
         public function getCharacterByName($characterName){
             $result = [
                 'success' => false,
