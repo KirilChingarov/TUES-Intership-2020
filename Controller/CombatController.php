@@ -140,7 +140,6 @@
 
             $playerParty = PlayerPartyService::jsonCreatePlayerParty($combatInfo['playerParty']);
             $enemyParty = EnemyPartyService::jsonCreateEnemyParty($combatInfo['enemyParty']);
-            $turns = $combatInfo['turns'];
             $currentTurn = $combatInfo['currentTurn'];
 
             // player attack
@@ -155,7 +154,7 @@
                 return;
             }
 
-            $combatInfo = new CombatInfo($playerParty, $enemyParty, $turns, $currentTurn);
+            $combatInfo = new CombatInfo($playerParty, $enemyParty, $combatInfo['turns'], $currentTurn);
 
             echo json_encode($combatInfo);
         }
@@ -170,6 +169,8 @@
             while(TRUE){
                 $targetId = rand(0, 3);
                 if(!$playerParty->members[$targetId]->isCharacterDead()){
+                    // wait 1 sec for "enemy" decision phase
+                    sleep(1);
                     echo $targetId;
                     return;
                 }
@@ -178,10 +179,38 @@
                 }
             }
 
+            // wait 1 sec for "enemy" decision phase
+            sleep(1);
             echo TARGET_NOT_FOUND;
         }
 
-        public function attackPlayer(){}
+        public function attackPlayer(){
+            $targetId = (int)$_POST['enemyTargetId'];
+            $attackerId = (int)$_POST['enemyAttackerId'];
+            $combatInfo = json_decode($_POST['combatInfo'], true);
+            
+            $playerParty = PlayerPartyService::jsonCreatePlayerParty($combatInfo['playerParty']);
+            $enemyParty = EnemyPartyService::jsonCreateEnemyParty($combatInfo['enemyParty']);
+            $currentTurn = $combatInfo['currentTurn'];
+
+            // enemy attack
+            if(!$enemyParty->members[$attackerId]->isCharacterDead()){
+                $enemyDamage = $enemyParty->members[$attackerId]->getCharacterAttackDamage();
+                $playerParty->members[$targetId]->takeDamage($enemyDamage);
+            }
+            $currentTurn++;
+
+            // check if player party is dead
+            if($this->checkParty($playerParty)){
+                View::render('combatLose');
+
+                return;
+            }
+
+            $combatInfo = new CombatInfo($playerParty, $enemyParty, $combatInfo['turns'], $currentTurn);
+
+            echo json_encode($combatInfo);
+        }
 
         private function checkParty($party){
             $deadCharacters = 0;

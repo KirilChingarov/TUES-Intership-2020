@@ -36,15 +36,52 @@
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        parseResponse(this.responseText);
+                        if(parseResponse(this.responseText)){
+                            enemyAttack();
+                        }
                     }
                 }
                 xhttp.open("POST", "index.php?target=combat&action=attackEnemy", true);
                 xhttp.send(data);
             }
 
-            function parseResponse(responseText){
+            function enemyAttack(){
+                var data = new FormData();
+                data.append('combatInfo', JSON.stringify(combatInfo));
+                //console.log('currentTurn: ' + combatInfo.currentTurn);
 
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        //console.log('enemyTargetId: ' + this.responseText);
+                        enemyTargetId = this.responseText;
+                        attackPlayer();
+                    }
+                }
+                xhttp.open("POST", "index.php?target=combat&action=getEnemyTargetId", true);
+                xhttp.send(data);
+            }
+
+            function attackPlayer(){
+                //console.log('Attacking Player');
+                
+                var data = new FormData();
+                data.append('enemyTargetId', enemyTargetId);
+                data.append('enemyAttackerId', attackerId);
+                data.append('combatInfo', JSON.stringify(combatInfo));
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        //console.log('enemyAttack: ' + this.responseText);
+                        parseResponse(this.responseText);
+                    }
+                }
+                xhttp.open("POST", "index.php?target=combat&action=attackPlayer", true);
+                xhttp.send(data);
+            }
+
+            function parseResponse(responseText){
                 if(!checkEndBattle(responseText)){
                     combatInfo = jQuery.parseJSON(responseText);
                     turns = combatInfo.turns;
@@ -54,30 +91,12 @@
                     updatePlayerPartyMembers(combatInfo.playerParty.members);
                     updateEnemyPartyMembers(combatInfo.enemyParty.members);
 
-                    getEnemyTargetId();
-                    attackPlayer();
+                    return true;
+                }
+                else{
+                    return false;
                 }
             };
-
-            function getEnemyTargetId(){
-                var data = new FormData();
-                data.append('combatInfo', JSON.stringify(combatInfo));
-                console.log('currentTurn: ' + combatInfo.currentTurn);
-
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function(){
-                    if(this.readyState == 4 && this.status == 200){
-                        console.log('enemyTargetId: ' + this.responseText);
-                        enemyTargetId = this.responseText;
-                    }
-                }
-                xhttp.open("POST", "index.php?target=combat&action=getEnemyTargetId", true);
-                xhttp.send(data);
-            }
-
-            function attackPlayer(){
-
-            }
 
             function checkEndBattle(responseText){
                 try {
@@ -97,10 +116,10 @@
                         $(playerStats).parent().attr('class', 'character-dead');
                     }
                     else{
-                        if(turns[currentTurn][1] == i){
+                        if(turns[currentTurn][0] == 'p' && turns[currentTurn][1] == i){
                             $(playerStats).parent().attr('class', 'character-turn');
                         }
-                        else if(turns[currentTurn + 1][1] == i){
+                        else if(turns[currentTurn + 1][0] == 'p' && turns[currentTurn + 1][1] == i){
                             $(playerStats).parent().attr('class', 'character-next-turn');
                         }
                         else{
@@ -119,10 +138,10 @@
                         $(enemyStats).parent().attr('class', 'character-dead');
                     }
                     else{
-                        if(turns[currentTurn][1] == i){
+                        if(turns[currentTurn][0] == 'e' && turns[currentTurn][1] == i){
                             $(enemyStats).parent().attr('class', 'enemy character-turn');
                         }
-                        else if(turns[currentTurn + 1][1] == i){
+                        else if(turns[currentTurn + 1][0] == 'e' && turns[currentTurn + 1][1] == i){
                             $(enemyStats).parent().attr('class', 'enemy character-next-turn');
                         }
                         else{
