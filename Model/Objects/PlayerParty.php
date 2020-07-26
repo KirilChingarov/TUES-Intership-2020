@@ -23,21 +23,6 @@
             return $playerParty;
         }
 
-        public static function jsonCreatePlayerParty($json_decoded){
-            $playerPartyId = $json_decoded['playerPartyId'];
-            $playerPartyName = $json_decoded['playerPartyName'];
-
-            $playerParty = new PlayerParty($playerPartyName, $playerPartyId);
-            
-            foreach($json_decoded['members'] as $member){
-                $character = Character::jsonCreateCharacter($member);
-
-                $playerParty->addMemberToParty($character);
-            }
-
-            return $playerParty;
-        }
-
         public function getPlayerPartyId(){
             return $this->playerPartyId;
         }

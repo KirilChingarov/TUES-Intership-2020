@@ -32,6 +32,21 @@
             return $result;
         }
 
+        public static function jsonCreateEnemyParty($json_decoded){
+            $enemyPartyId = $json_decoded['enemyPartyId'];
+            $enemyPartyName = $json_decoded['enemyPartyName'];
+
+            $enemyParty = new EnemyParty($enemyPartyName, $enemyPartyId);
+            
+            foreach($json_decoded['members'] as $member){
+                $character = CharacterService::jsonCreateCharacter($member);
+
+                $enemyParty->addMemberToEnemyParty($character);
+            }
+
+            return $enemyParty;
+        }
+
         public function getEnemyPartyByName($partyName)
         {
             $result = [
