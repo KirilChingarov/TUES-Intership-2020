@@ -19,6 +19,7 @@
         <title>Combat Info</title>
         <link rel="stylesheet" href="View/css/combatInfo.css" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script>
             var targetId;
             var currentTurn = <?= $currentTurn?>;
@@ -39,6 +40,7 @@
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
+                        takeDamage(targetId);
                         if(parseResponse(this.responseText)){
                             enemyAttack();
                         }
@@ -151,21 +153,33 @@
                 for(var i = 0;i < 4;i++){
                     var enemyStats = "#enemy-" + i;
                     if(enemyPartyMembers[i].characterIsDead){
-                        $(enemyStats).parent().attr('class', 'character-dead');
+                        //$(enemyStats).parent().attr('class', 'character-dead');
+                        $(enemyStats).parent().effect("explode", {pieces: 49}, 400, callback(enemyStats));
+                        //$(enemyStats).parent().hide();
                     }
                     else{
                         if(turns[currentTurn][0] == 'e' && turns[currentTurn][1] == i){
-                            $(enemyStats).parent().attr('class', 'enemy character-turn');
+                            $(enemyStats).parent().attr('class', 'character-turn');
                         }
                         else if(currentTurn < LAST_ENEMY_TURN && turns[currentTurn + 1][0] == 'e' && turns[currentTurn + 1][1] == i){
-                            $(enemyStats).parent().attr('class', 'enemy character-next-turn');
+                            $(enemyStats).parent().attr('class', 'character-next-turn');
                         }
                         else{
-                            $(enemyStats).parent().attr('class', 'enemy character');
+                            $(enemyStats).parent().attr('class', 'character');
                         }
                         $(enemyStats + ">.health").text("Health: " + enemyPartyMembers[i].characterHealth);
                     }
                 }
+            }
+
+            function takeDamage(buttonId){
+                $("#" + buttonId).parent().effect("pulsate");
+            }
+
+            function callback(target){
+                setTimeout(function(){
+                    $(target).removeAttr("style").hide();
+                }, 1000);
             }
         </script>
     </head>
@@ -222,10 +236,10 @@
                         foreach($enemyPartyMembers as $epm){
                             $cssClass;
                             if($turns[$currentTurn+1][1] === $epmNum){
-                                $cssClass = 'enemy character-next-turn';
+                                $cssClass = 'character-next-turn';
                             }
                             else{
-                                $cssClass = 'character enemy';
+                                $cssClass = 'character';
                             }
                             if($epm->isCharacterDead()){
                                 $cssClass = 'character-dead';
