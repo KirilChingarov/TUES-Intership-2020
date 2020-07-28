@@ -35,6 +35,8 @@
             const ENEMY_TURN = 1;
 
             function attackEnemy(){
+                disableButtons();
+
                 var data = new FormData();
                 data.append('targetId', targetId);
                 data.append('attackerId', attackerId);
@@ -99,6 +101,9 @@
                     attackerId = turns[turns[currentTurn][1]];
 
                     enemyAttack();
+                }
+                else{
+                    enableButtons();
                 }
             }
 
@@ -209,6 +214,18 @@
                 setTimeout(function(){
                     $(target).parent().removeAttr("style").hide();
                 }, 400);
+            }
+
+            function disableButtons(){
+                for(var i = 0;i < 4;i++){
+                    $("#" + i).attr('disabled', true);
+                }
+            }
+
+            function enableButtons(){
+                for(var i = 0;i < 4;i++){
+                    $("#" + i).attr('disabled', false);
+                }
             }
         </script>
     </head>
