@@ -27,6 +27,7 @@
             var attackerId = combatInfo.turns[currentTurn][1];
             var turns = combatInfo.turns;
             var enemyTargetId;
+            var battleLost = false;
             const LAST_PLAYER_TURN = 6;
             const LAST_ENEMY_TURN = 7;
             const NEW_ROUND = 0;
@@ -111,8 +112,8 @@
                         updateEnemyPartyMembers(combatInfo.enemyParty.members);
                     }
                     if(turn == ENEMY_TURN){
-                        updatePlayerPartyMembers(combatInfo.playerParty.members);
                         hitPlayer(enemyTargetId, attackerId);
+                        updatePlayerPartyMembers(combatInfo.playerParty.members);
                     }
                     
                     attackerId = combatInfo.turns[currentTurn][1];
@@ -130,7 +131,11 @@
                     jQuery.parseJSON(responseText);
                     return false;
                 } catch (error) {
-                    document.write(responseText);
+                    if(!battleLost){
+                        console.log(responseText);
+                        document.write(responseText);
+                        battleLost = true;
+                    }
                     return true;
                 }
             }
@@ -141,17 +146,9 @@
                     var playerStats = "#player-" + i;
                     if(playerPartyMembers[i].characterIsDead && !$(playerStats).parent().is(":hidden")){
                         $(playerStats).parent().attr('class', 'character-dead');
+                        $(playerStats).parent().effect("explode", {pieces: 49}, 400, callback(playerStats));
                     }
                     else{
-                        /*if(turns[currentTurn][0] == 'p' && turns[currentTurn][1] == i){
-                            $(playerStats).parent().attr('class', 'character-turn');
-                        }
-                        else if(currentTurn < LAST_PLAYER_TURN && turns[currentTurn + 1][0] == 'p' && turns[currentTurn + 1][1] == i){
-                            $(playerStats).parent().attr('class', 'character-next-turn');
-                        }
-                        else{
-                            $(playerStats).parent().attr('class', 'character');
-                        }*/
                         $(playerStats + ">.health").text("Health: " + playerPartyMembers[i].characterHealth);
                     }
                 }
@@ -162,20 +159,9 @@
                 for(var i = 0;i < 4;i++){
                     var enemyStats = "#enemy-" + i;
                     if(enemyPartyMembers[i].characterIsDead && !$(enemyStats).parent().is(":hidden")){
-                        //$(enemyStats).parent().attr('class', 'character-dead');
                         $(enemyStats).parent().effect("explode", {pieces: 49}, 400, callback(enemyStats));
-                        //$(enemyStats).parent().hide();
                     }
                     else{
-                        /*if(turns[currentTurn][0] == 'e' && turns[currentTurn][1] == i){
-                            $(enemyStats).parent().attr('class', 'character-turn');
-                        }
-                        else if(currentTurn < LAST_ENEMY_TURN && turns[currentTurn + 1][0] == 'e' && turns[currentTurn + 1][1] == i){
-                            $(enemyStats).parent().attr('class', 'character-next-turn');
-                        }
-                        else{
-                            $(enemyStats).parent().attr('class', 'character');
-                        }*/
                         $(enemyStats + ">.health").text("Health: " + enemyPartyMembers[i].characterHealth);
                     }
                 }
@@ -214,7 +200,7 @@
             }
 
             function hitPlayer(targetId, attackerId){
-                if(!combatInfo.enemyParty.members[attackerId].characterIsDead){
+                if(combatInfo.enemyParty.members[attackerId] != null && !combatInfo.enemyParty.members[attackerId].characterIsDead){
                     $("#player-" + targetId).parent().effect("pulsate");
                 }
             }
