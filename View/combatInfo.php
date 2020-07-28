@@ -106,14 +106,16 @@
                     combatInfo = jQuery.parseJSON(responseText);
                     turns = combatInfo.turns;
                     currentTurn = combatInfo.currentTurn;
-                    attackerId = combatInfo.turns[currentTurn][1];
 
                     if(turn == PLAYER_TURN){
                         updateEnemyPartyMembers(combatInfo.enemyParty.members);
                     }
                     if(turn == ENEMY_TURN){
                         updatePlayerPartyMembers(combatInfo.playerParty.members);
+                        hitPlayer(enemyTargetId, attackerId);
                     }
+                    
+                    attackerId = combatInfo.turns[currentTurn][1];
                     updatePartyTurns(combatInfo.playerParty.members, combatInfo.enemyParty.members);
 
                     return true;
@@ -211,11 +213,15 @@
                 $("#" + buttonId).parent().effect("pulsate");
             }
 
+            function hitPlayer(targetId, attackerId){
+                if(!combatInfo.enemyParty.members[attackerId].characterIsDead){
+                    $("#player-" + targetId).parent().effect("pulsate");
+                }
+            }
+
             function callback(target){
-                
                 setTimeout(function(){
                     $(target).parent().removeAttr("style").hide();
-                    //console.log($(target).parent().is(":hidden"));
                 }, 400);
             }
         </script>
