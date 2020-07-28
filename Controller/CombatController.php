@@ -170,7 +170,7 @@
                 $targetId = rand(0, 3);
                 if(!$playerParty->members[$targetId]->isCharacterDead()){
                     // wait 0.1 sec for "enemy" decision phase
-                    usleep(0.1 * 1000000);
+                    usleep(0.5 * 1000000);
                     echo $targetId;
                     return;
                 }
@@ -180,7 +180,7 @@
             }
 
             // wait 0.1 sec for "enemy" decision phase
-            usleep(0.1 * 1000000);
+            usleep(0.5 * 1000000);
             echo TARGET_NOT_FOUND;
         }
 

@@ -30,6 +30,8 @@
             const LAST_PLAYER_TURN = 6;
             const LAST_ENEMY_TURN = 7;
             const NEW_ROUND = 0;
+            const PLAYER_TURN = 0;
+            const ENEMY_TURN = 1;
 
             function attackEnemy(){
                 var data = new FormData();
@@ -41,7 +43,7 @@
                 xhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
                         takeDamage(targetId);
-                        if(parseResponse(this.responseText)){
+                        if(parseResponse(this.responseText, PLAYER_TURN)){
                             enemyAttack();
                         }
                     }
@@ -74,7 +76,7 @@
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status == 200){
-                        parseResponse(this.responseText);
+                        parseResponse(this.responseText, ENEMY_TURN);
                         checkNextTurn();
                     }
                 }
@@ -99,15 +101,20 @@
                 }
             }
 
-            function parseResponse(responseText){
+            function parseResponse(responseText, turn){
                 if(!checkEndBattle(responseText)){
                     combatInfo = jQuery.parseJSON(responseText);
                     turns = combatInfo.turns;
                     currentTurn = combatInfo.currentTurn;
                     attackerId = combatInfo.turns[currentTurn][1];
 
-                    updatePlayerPartyMembers(combatInfo.playerParty.members);
-                    updateEnemyPartyMembers(combatInfo.enemyParty.members);
+                    if(turn == PLAYER_TURN){
+                        updateEnemyPartyMembers(combatInfo.enemyParty.members);
+                    }
+                    if(turn == ENEMY_TURN){
+                        updatePlayerPartyMembers(combatInfo.playerParty.members);
+                    }
+                    updatePartyTurns(combatInfo.playerParty.members, combatInfo.enemyParty.members);
 
                     return true;
                 }
@@ -130,11 +137,11 @@
 
                 for(var i = 0;i < 4;i++){
                     var playerStats = "#player-" + i;
-                    if(playerPartyMembers[i].characterIsDead){
+                    if(playerPartyMembers[i].characterIsDead && !$(playerStats).parent().is(":hidden")){
                         $(playerStats).parent().attr('class', 'character-dead');
                     }
                     else{
-                        if(turns[currentTurn][0] == 'p' && turns[currentTurn][1] == i){
+                        /*if(turns[currentTurn][0] == 'p' && turns[currentTurn][1] == i){
                             $(playerStats).parent().attr('class', 'character-turn');
                         }
                         else if(currentTurn < LAST_PLAYER_TURN && turns[currentTurn + 1][0] == 'p' && turns[currentTurn + 1][1] == i){
@@ -142,7 +149,7 @@
                         }
                         else{
                             $(playerStats).parent().attr('class', 'character');
-                        }
+                        }*/
                         $(playerStats + ">.health").text("Health: " + playerPartyMembers[i].characterHealth);
                     }
                 }
@@ -152,13 +159,13 @@
                 
                 for(var i = 0;i < 4;i++){
                     var enemyStats = "#enemy-" + i;
-                    if(enemyPartyMembers[i].characterIsDead){
+                    if(enemyPartyMembers[i].characterIsDead && !$(enemyStats).parent().is(":hidden")){
                         //$(enemyStats).parent().attr('class', 'character-dead');
                         $(enemyStats).parent().effect("explode", {pieces: 49}, 400, callback(enemyStats));
                         //$(enemyStats).parent().hide();
                     }
                     else{
-                        if(turns[currentTurn][0] == 'e' && turns[currentTurn][1] == i){
+                        /*if(turns[currentTurn][0] == 'e' && turns[currentTurn][1] == i){
                             $(enemyStats).parent().attr('class', 'character-turn');
                         }
                         else if(currentTurn < LAST_ENEMY_TURN && turns[currentTurn + 1][0] == 'e' && turns[currentTurn + 1][1] == i){
@@ -166,8 +173,36 @@
                         }
                         else{
                             $(enemyStats).parent().attr('class', 'character');
-                        }
+                        }*/
                         $(enemyStats + ">.health").text("Health: " + enemyPartyMembers[i].characterHealth);
+                    }
+                }
+            }
+
+            function updatePartyTurns(playerPartyMembers, enemyPartyMembers){
+                for(var i = 0;i < 4;i++){
+                    // player turns ---------------------------
+                    var playerStats = "#player-" + i;
+                    if(turns[currentTurn][0] == 'p' && turns[currentTurn][1] == i){
+                        $(playerStats).parent().attr('class', 'character-turn');
+                    }
+                    else if(currentTurn < LAST_PLAYER_TURN && turns[currentTurn + 1][0] == 'p' && turns[currentTurn + 1][1] == i){
+                        $(playerStats).parent().attr('class', 'character-next-turn');
+                    }
+                    else{
+                        $(playerStats).parent().attr('class', 'character');
+                    }
+
+                    // enemy turns ---------------------------
+                    var enemyStats = "#enemy-" + i;
+                    if(turns[currentTurn][0] == 'e' && turns[currentTurn][1] == i){
+                        $(enemyStats).parent().attr('class', 'character-turn');
+                    }
+                    else if(currentTurn < LAST_ENEMY_TURN && turns[currentTurn + 1][0] == 'e' && turns[currentTurn + 1][1] == i){
+                        $(enemyStats).parent().attr('class', 'character-next-turn');
+                    }
+                    else{
+                        $(enemyStats).parent().attr('class', 'character');
                     }
                 }
             }
@@ -177,9 +212,11 @@
             }
 
             function callback(target){
+                
                 setTimeout(function(){
-                    $(target).removeAttr("style").hide();
-                }, 1000);
+                    $(target).parent().removeAttr("style").hide();
+                    //console.log($(target).parent().is(":hidden"));
+                }, 400);
             }
         </script>
     </head>
